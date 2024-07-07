@@ -1,17 +1,33 @@
 import { useNavigate  } from "react-router-dom";
-import {  useEffect } from "react";
+import {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios"
 import { setPosts } from "../store/Features/postSlice";
 import { toggleLike } from "../store/Features/postSlice";
+import {jwtDecode} from 'jwt-decode';
+
 
 export default function Home(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
-    const userId = useSelector(state => state.user.id);
-    const posts = useSelector((state) => state.post.posts);
 
+    const posts = useSelector((state) => state.post.posts);
+    const storedToken = localStorage.getItem('token');
+
+    if(!storedToken){
+      alert('Token Not found');
+      return;
+    }
+
+    const decodedToken = jwtDecode(storedToken);
+
+    if(!decodedToken.userId){
+      alert('Token doesnt have userId');
+      return;
+    }
+
+    const userId = decodedToken.userId;
+    
     async function logout() {
         try {
             const response = await axios.get('http://localhost:3002/logout');
@@ -39,12 +55,15 @@ export default function Home(){
       try {
         const response = await axios.get('http://localhost:3002/posts/fetch');
         console.log(response.data.posts);
+
+        
         dispatch(setPosts(response.data.posts.map((post) => ({
           _id: post._id,
-          likes: post.likes,
           content: post.content,
           author: post.author.name,
-        })))); 
+          likes: post.likes,
+          isLiked : post.likes.includes(userId),
+        }))));
         
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -52,7 +71,7 @@ export default function Home(){
     };
 
     fetchPosts();
-  }, [dispatch]);
+  }, []);
 
    async function newPost(){
         navigate('/newpost');        
@@ -60,12 +79,24 @@ export default function Home(){
 
    const handleLike = async (post) => {
     try {
+      if(!post){
+        alert('Post not found');
+        return;
+      }
         const postId = post._id;
-        const response = await axios.put(`http://localhost:3002/posts/toggleLike`,{userId,postId});
+        
+
+        dispatch(toggleLike({ postId, userId }));
+        const response = await axios.put(`http://localhost:3002/posts/toggleLike`,{userId , postId});
+        if(response.status===401){
+          dispatch(toggleLike({ postId, userId }));
+          alert('You must be Logged in!');
+          navigate('/login');
+        }
         if (response.status === 200) {
-            //const updatedIsLiked = !post.isLiked;
-            dispatch(toggleLike({ postId, userId }));
+            
         } else {
+            dispatch(toggleLike({ postId, userId }));
             console.error('Error liking post:', response.data.message);
         }
         } catch (error) {

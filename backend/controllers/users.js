@@ -1,5 +1,5 @@
 const User =require("../models/users");
-
+const jwt = require('jsonwebtoken');
 
 module.exports.signUp = async (req,res) =>{
     console.log(req.body);
@@ -26,7 +26,8 @@ module.exports.signUp = async (req,res) =>{
             username,
             email,
             contact,
-            name
+            name,
+            password
         });
 
         const registeredUser=await User.register(newUser,req.body.password);
@@ -34,10 +35,13 @@ module.exports.signUp = async (req,res) =>{
         req.login(registeredUser , (err) =>{
             if(err){
                 console.log(err);
+                
                 return res.status(400).json({ message: 'Error saving the user' });
             }
             else{
-                return res.status(200).json({ message: 'User created successfully', userData: registeredUser  });
+                const token = jwt.sign({ userId : registeredUser._id }, 'secretkey', { algorithm: 'HS256' });
+                
+                return res.status(200).json({ message: 'User created successfully', userData: registeredUser , token });
             }
         });
 
@@ -49,10 +53,23 @@ module.exports.signUp = async (req,res) =>{
 
 module.exports.login =async (req,res) => {
     try {
-     //   console.log('logging in');
+        
+        console.log(req.body);
+        
         const user = await User.find({username:req.body.username});  
-      //  console.log(user);
-        return res.status(200).json({ message: 'Login successful!', user });    
+        console.log(user);
+
+        if (Object.keys( user).length===0) {
+            return res.status(401).json({ message: 'Invalid User' });
+        }
+
+  
+        if(req.body.password != user[0].password) return res.status(401).json({ message: 'Invalid username or password' });
+  
+        const payload = { userId: user[0]._id }; 
+        const token = jwt.sign(payload, 'secretkey' , { expiresIn: '1h' });
+        
+        return res.status(200).json({ message: 'Login successful!', token });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: 'Error extracting user information' });

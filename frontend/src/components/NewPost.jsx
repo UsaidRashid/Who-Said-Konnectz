@@ -1,21 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios"
-import { useSelector } from "react-redux";
+import axios from "axios";
 
 
 export default function NewPost(){
     const navigate= useNavigate();
     const [postText, setPostText] = useState("");
-    const currentUser = useSelector(state=> state.user);
-
     
     async function createPost(){
         try {
             const content = postText;
-            const author = currentUser;
-            
-            const response = await axios.post('http://localhost:3002/posts/new',{content,author});
+            const storedToken = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:3002/posts/new',{content,token:storedToken});
+
+            if(response.status===401){
+                alert('You must be Logged in!');
+                navigate('/login');
+              }
             
             if (response.status === 200) {
                 alert(response.data.message);

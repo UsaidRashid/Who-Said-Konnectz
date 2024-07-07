@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  posts: [],
+  posts: [{
+    _id : '',
+    likes : [],
+    content : '',
+    author : '',
+  }],
 };
-
 
 const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
     setPosts(state, action) {
-        state.posts = action.payload.map((post) => ({
-            ...post,
-            isLiked: false, 
-        }));
+      state.posts = action.payload;
     },
     toggleLike(state, action) {
         const { postId, userId } = action.payload;

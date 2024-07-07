@@ -1,13 +1,18 @@
 const Post = require ("../models/posts");
 const User = require("../models/users");
+const jwt = require('jsonwebtoken');
+
 
 module.exports.createPost = async (req,res) => {
-    console.log(req.body.author);
-    const { author , content } =req.body;
-    const authorDB =await User.find({username:author.username});
-    console.log(authorDB);
+    
+    const { content ,token } =req.body;
+    console.log(req.body);
+
+    const decodedToken =jwt.verify(token, "secretkey");
+    
+    const authorDB =await User.find({_id:decodedToken.userId});
+    
     const authorId = authorDB[0]._id;
-    console.log(authorId);
 
     try {
         const newPost = new Post({author: authorId , content});
@@ -26,6 +31,10 @@ module.exports.toggleLike = async (req,res) => {
     const { postId , userId } =req.body;
     
 
+    console.log(postId);
+    console.log(userId);
+    
+
     try {
         const post = await Post.findById(postId);
 
@@ -38,9 +47,7 @@ module.exports.toggleLike = async (req,res) => {
         await post.save();
         console.log(post);
 
-        const likesCount = post.likes.length;
-
-        res.status(200).json({ message : unliked? "Unliked Successfully" : "Liked Successfully" , likesCount});
+        res.status(200).json({ message : unliked? "Unliked Successfully" : "Liked Successfully" , userId});
         
     } catch (error) {
         console.error(error);

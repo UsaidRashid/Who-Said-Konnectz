@@ -12,12 +12,13 @@ export default function SignUp(){
         e.preventDefault();
         try {
             const userData = { username, email, name, contact, password };
-            console.log(userData);
             const response = await axios.post('http://localhost:3002/signup',userData);
-            console.log(response.data.userData._id);
+            console.log(response.data);
         
             if (response.status === 200) {
                 alert(response.data.message);
+                const token = response.data.token;
+                localStorage.setItem('token',token);
                 dispatch(setId(response.data.userData._id));
                 navigate('/home');
                 return response.data;
