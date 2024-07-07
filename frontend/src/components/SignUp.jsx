@@ -13,7 +13,6 @@ export default function SignUp(){
         try {
             const userData = { username, email, name, contact, password };
             const response = await axios.post('http://localhost:3002/signup',userData);
-            console.log(response.data);
         
             if (response.status === 200) {
                 alert(response.data.message);

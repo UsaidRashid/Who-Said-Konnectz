@@ -54,9 +54,7 @@ export default function Home(){
     const fetchPosts = async () => {
       try {
         const response = await axios.get('http://localhost:3002/posts/fetch');
-        console.log(response.data.posts);
 
-        
         dispatch(setPosts(response.data.posts.map((post) => ({
           _id: post._id,
           content: post.content,
@@ -85,18 +83,15 @@ export default function Home(){
       }
         const postId = post._id;
         
-
-        dispatch(toggleLike({ postId, userId }));
         const response = await axios.put(`http://localhost:3002/posts/toggleLike`,{userId , postId});
+        
         if(response.status===401){
-          dispatch(toggleLike({ postId, userId }));
           alert('You must be Logged in!');
           navigate('/login');
         }
         if (response.status === 200) {
-            
-        } else {
             dispatch(toggleLike({ postId, userId }));
+        } else {
             console.error('Error liking post:', response.data.message);
         }
         } catch (error) {
@@ -125,7 +120,6 @@ export default function Home(){
       ) : (
         <p>No posts found.</p>
       )}
-      {/* {console.log("updated posts ",posts)} */}
         </div>
     )
 }

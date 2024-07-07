@@ -2,7 +2,6 @@ const User =require("../models/users");
 const jwt = require('jsonwebtoken');
 
 module.exports.signUp = async (req,res) =>{
-    console.log(req.body);
     let { name , email , password , contact , username } = req.body;
 
     if (!name || !email || !contact || !password || !username) {
@@ -53,12 +52,8 @@ module.exports.signUp = async (req,res) =>{
 
 module.exports.login =async (req,res) => {
     try {
-        
-        console.log(req.body);
-        
         const user = await User.find({username:req.body.username});  
-        console.log(user);
-
+        
         if (Object.keys( user).length===0) {
             return res.status(401).json({ message: 'Invalid User' });
         }

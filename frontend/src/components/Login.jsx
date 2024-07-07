@@ -17,12 +17,8 @@ export default function Login(){
             
             const response = await axios.post('http://localhost:3002/login',userData);
             
-            console.log(response.data);
             if (response.status === 200) {
-        
-                
                 const token = response.data.token;
-                console.log(jwtDecode(token));
                 localStorage.setItem('token',token);
                 alert(response.data.message);
                 navigate('/home');
