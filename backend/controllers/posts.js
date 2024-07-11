@@ -48,7 +48,15 @@ module.exports.toggleLike = async (req,res) => {
 
 module.exports.fetchPosts = async (req,res) =>{
     try {
-        const posts = await Post.find({}).populate('author', 'name');;
+        const posts = await Post.find({})
+        .populate('author', 'name') 
+        .populate({ 
+            path: 'comments',
+            populate: { 
+            path: 'author',
+            select: 'name'
+            }
+        });
         return res.status(200).json({message:"Posts fetched successfully", posts});
     } catch (error) {
         console.error("Error fetching posts:",error);

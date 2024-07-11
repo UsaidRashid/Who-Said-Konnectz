@@ -5,7 +5,13 @@ module.exports.createComment = async (req , res) => {
     const { postId , content , author } = req.body;
 
     try {
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate({
+            path: 'comments',
+            populate:{
+                path:'author',
+                select:'name',
+            }
+        });
 
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
@@ -13,8 +19,12 @@ module.exports.createComment = async (req , res) => {
     
         const newComment = new Comment({ content, author, post: postId });
         await newComment.save();
-    
-        res.status(201).json({ message: 'Comment created successfully', comment: newComment });
+        
+        post.comments.push(newComment);
+        
+        await post.save();
+        console.log(post);
+        res.status(200).json({ message: 'Comment created successfully', comment: newComment });
     } catch (error) {
         console.error(error);
         return res.status(500).json({message : "Internal Server Error"});

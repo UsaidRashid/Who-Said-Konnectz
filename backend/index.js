@@ -62,9 +62,11 @@ app.use((err, req, res, next) => {
 
 const userRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
+const commentRouter = require('./routes/comments');
 
 app.use("/",userRouter);
 app.use("/posts/",postRouter);
+app.use('/comments/',commentRouter);
 
 app.get("/", (req,res,next)=>{
     res.send("It's the backend of Who-Said Konnectz!");
@@ -72,4 +74,4 @@ app.get("/", (req,res,next)=>{
 
 app.listen(port,()=>{
     console.log(`Who-Said Konnectz running on port ${port}`);
-})
+});

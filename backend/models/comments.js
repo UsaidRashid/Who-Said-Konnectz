@@ -27,13 +27,12 @@ const commentSchema = new mongoose.Schema({
 commentSchema.methods.toggleLike = async function(userId){
     const liked = this.likes.includes(userId);
     if(liked){
-        this.likes = this.likes.filter(id => id.toString() !== userId.toString());
+        this.likes.pull(userId);
     }else{
         this.likes.push(userId);
     }
-
     await this.save();
-    return liked;
+    return !liked;
 }
 
 

@@ -6,6 +6,13 @@ const initialState = {
     likes : [],
     content : '',
     author : '',
+    comments : 
+    [{
+      _id:'',
+      content : '',
+      author : '',
+      likes:[],
+    }],
   }],
 };
 
@@ -33,8 +40,30 @@ const postSlice = createSlice({
           }
         }
     },
+    toggleLikeComment(state,action){
+      const {commentId,postId,userId} = action.payload;
+      const postIndex = state.posts.findIndex((post) => post._id === postId);
+      if (postIndex !== -1) {
+        const post = state.posts[postIndex];
+        const commentIndex = post.comments.findIndex((comment) => comment._id === commentId);
+
+        if(commentIndex!==-1){
+          const comment = state.posts[postIndex].comments[commentIndex];
+
+          const isCommentLiked = comment.likes.includes(userId);
+
+          comment.isCommentLiked = !isCommentLiked; 
+
+          if (isCommentLiked) {
+            comment.likes = comment.likes.filter(like => like !== userId);
+          } else {
+            comment.likes.push(userId); 
+          }
+        }
+      }
+    }
   },
 });
 
-export const { setPosts, toggleLike } = postSlice.actions;
+export const { setPosts, toggleLike ,toggleLikeComment} = postSlice.actions;
 export default postSlice.reducer;

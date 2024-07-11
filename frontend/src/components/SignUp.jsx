@@ -19,7 +19,7 @@ export default function SignUp(){
                 const token = response.data.token;
                 localStorage.setItem('token',token);
                 dispatch(setId(response.data.userData._id));
-                navigate('/home');
+                navigate('/');
                 return response.data;
             } else {
                 alert('Unexpected status code: ' + response.status);
@@ -67,7 +67,7 @@ export default function SignUp(){
                         Sign Up
                     </button>
                 </div>
-                <p className="flex justify-end">Already Have an account? &nbsp; <Link to='/' className='underline text-green'>Login</Link>&nbsp;here</p>
+                <p className="flex justify-end">Already Have an account? &nbsp; <Link to='/login' className='underline text-green'>Login</Link>&nbsp;here</p>
             </form>
         </div>
         </div>

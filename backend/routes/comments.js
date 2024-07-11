@@ -9,3 +9,6 @@ router
 router
     .route("/toggleLike")
         .post(commentsController.toggleLike);
+
+
+module.exports = router;

@@ -1,8 +1,7 @@
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
-
+import { Link } from "react-router-dom";
 
 export default function Login(){
     const [username, setUsername] = useState('');
@@ -21,7 +20,7 @@ export default function Login(){
                 const token = response.data.token;
                 localStorage.setItem('token',token);
                 alert(response.data.message);
-                navigate('/home');
+                navigate('/');
                 return response.data;
             } else {
                 alert('Unexpected status code: ' + response.status);
@@ -54,6 +53,9 @@ export default function Login(){
                         Login
                     </button>
                 </div>
+                <br />
+                <div className="float-right"><p>or <Link className="underline" to='/signup'>register</Link>  for a new user</p></div>
+                
             </form>
         </div>
     );

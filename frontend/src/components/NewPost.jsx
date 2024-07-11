@@ -15,12 +15,12 @@ export default function NewPost(){
 
             if(response.status===401){
                 alert('You must be Logged in!');
-                navigate('/login');
+                navigate('/');
               }
             
             if (response.status === 200) {
                 alert(response.data.message);
-                navigate('/home');
+                navigate('/');
                 return response.data;
             } else {
                 alert('Unexpected status code: ' + response.status);
