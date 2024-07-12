@@ -9,6 +9,7 @@ import store from "./store/store";
 import Login from './components/Login';
 import Home from './components/Home';
 import NewPost from './components/NewPost';
+import ChatBox from './components/Chatbox';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path='/newpost' element={<NewPost/>}/>
+          <Route path='/chatbox' element={<ChatBox/>}></Route>
         </Routes>
       </BrowserRouter>
 
