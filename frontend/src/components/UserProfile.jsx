@@ -94,7 +94,7 @@ export default function Profile(props) {
   return (
     <>
       {openDM ? (
-        <ChatBox fromId = {token.user._id}  toId = {user._id} />
+        <ChatBox fromId={token.user._id} toId={user._id} />
       ) : (
         <div
           class="container rounded bg-white"
@@ -139,28 +139,28 @@ export default function Profile(props) {
                     <p class="fs-5">{user?.contact}</p>
                   </div>
                 </div>
-                {token && token?.user?._id !== user?._id && (
-                  <div className="d-flex flex-row justify-content-around w-50 my-3 pt-3">
-                    {isFriend ? (
+                {token &&
+                  token?.user?._id !== user?._id &&
+                  (isFriend ? (
+                    <div className="d-flex flex-row justify-content-around w-50 my-3 pt-3">
                       <button
                         className="btn btn-primary"
                         onClick={removeFriend}
                       >
                         Friends
                       </button>
-                    ) : (
-                      <button className="btn btn-primary" onClick={addFriend}>
-                        Add Friend
+                      <button
+                        className="btn btn-success"
+                        onClick={() => setOpenDM(true)}
+                      >
+                        Message
                       </button>
-                    )}
-                    <button
-                      className="btn btn-success"
-                      onClick={() => setOpenDM(true)}
-                    >
-                      Message
+                    </div>
+                  ) : (
+                    <button className="btn btn-primary" onClick={addFriend}>
+                      Add Friend
                     </button>
-                  </div>
-                )}
+                  ))}
               </div>
             </div>
           </div>
