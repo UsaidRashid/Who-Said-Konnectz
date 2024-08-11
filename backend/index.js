@@ -117,11 +117,13 @@ const userRouter = require("./routes/users");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
 const messageRouter = require("./routes/messages");
+const whoSaidRouter = require("./routes/whosaid");
 
 app.use("/", userRouter);
 app.use("/posts/", postRouter);
 app.use("/comments/", commentRouter);
 app.use("/messages/", messageRouter);
+app.use("/who-said/", whoSaidRouter);
 
 app.get("/", (req, res, next) => {
   res.send("It's the backend of Who-Said Konnectz!");
