@@ -166,7 +166,6 @@ module.exports.acceptFriendRequest = async (req, res) => {
 
 module.exports.rejectFriendRequest = async (req, res) => {
   try {
-    
     const { toId, fromId } = req.body;
     const user1 = await User.findOne({ _id: toId }).populate(
       "requestsRecieved"
@@ -181,7 +180,7 @@ module.exports.rejectFriendRequest = async (req, res) => {
     });
     return res
       .status(200)
-      .json({ message: "Friend Request Rejected Successfully" ,token });
+      .json({ message: "Friend Request Rejected Successfully", token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error", error });
