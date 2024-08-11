@@ -16,9 +16,11 @@ import Friends from "./Friends";
 import WhoSaid from "./WhoSaid";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HandshakeIcon from "@mui/icons-material/Handshake";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FriendRequests from "./FriendRequests";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import AllDms from "./AllDms";
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
@@ -66,14 +68,16 @@ export default function Navigation() {
       case 0:
         return <Home />;
       case 1:
-        return <WhoSaid />;
+        return <AllDms/>;
       case 2:
-        return <NewPost postCreated={postCreated} />;
+        return <WhoSaid />;
       case 3:
-        return <Friends />;
+        return <NewPost postCreated={postCreated} />;
       case 4:
-        return <FriendRequests />;
+        return <Friends />;
       case 5:
+        return <FriendRequests />;
+      case 6:
         return <Users />;
       default:
         return <Home />;
@@ -105,6 +109,11 @@ export default function Navigation() {
             className="text-white"
             label="Home"
             icon={<HomeIcon />}
+          />
+           <BottomNavigationAction
+            className="text-white"
+            label="Chats"
+            icon={<ChatBubbleOutlineIcon />}
           />
           <BottomNavigationAction
             className="text-white"
