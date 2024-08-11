@@ -3,13 +3,16 @@ import profile from "../Images/profile.png";
 import axios from "axios";
 import ChatBox from "./Chatbox";
 import { jwtDecode } from "jwt-decode";
+import { Modal, Button } from "react-bootstrap";
 
 export default function Profile(props) {
   const [user, setUser] = useState({ friends: [] });
   const [token, setToken] = useState();
   const [isFriend, setIsFriend] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
+  const [requestRecieved, setRequestRecieved] = useState(false);
   const [openDM, setOpenDM] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -34,6 +37,16 @@ export default function Profile(props) {
         )
       ) {
         setRequestSent(true);
+      }
+
+      if (
+        props.user &&
+        decodedToken &&
+        decodedToken?.user?.requestsRecieved?.some(
+          (friend) => friend._id === props.user._id
+        )
+      ) {
+        setRequestRecieved(true);
       }
     }
   });
@@ -103,6 +116,79 @@ export default function Profile(props) {
     }
   };
 
+  const handleAccept = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3002/accept-friend-request",
+        {
+          fromId: user._id,
+          toId: token.user._id,
+        }
+      );
+      if (response.status === 200) {
+        alert("Friend Request Accepted Successfully");
+        localStorage.clear();
+        localStorage.setItem("token", response.data.token);
+        window.location.reload();
+      } else {
+        alert(response.data.message || "Error Accepting Request");
+      }
+    } catch (error) {
+      console.error("Error Accepting Friend Request:", error);
+      if (error.response) {
+        alert(
+          "Error from server: " +
+            error.response.status +
+            " - " +
+            error.response.data.message
+        );
+      } else if (error.request) {
+        alert("No response from the server");
+      } else {
+        alert("Error setting up the request: " + error.message);
+      }
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3002/reject-friend-request",
+        {
+          fromId: user._id,
+          toId: token.user._id,
+        }
+      );
+      if (response.status === 200) {
+        alert("Friend Request Rejected Successfully");
+        localStorage.clear();
+        localStorage.setItem("token", response.data.token);
+        window.location.reload();
+      } else {
+        alert(response.data.message || "Error Accepting Request");
+      }
+    } catch (error) {
+      console.error("Error Accepting Friend Request:", error);
+      if (error.response) {
+        alert(
+          "Error from server: " +
+            error.response.status +
+            " - " +
+            error.response.data.message
+        );
+      } else if (error.request) {
+        alert("No response from the server");
+      } else {
+        alert("Error setting up the request: " + error.message);
+      }
+    }
+  };
+
+  const handleConfirmUnfriend = () => {
+    removeFriend();
+    setShowConfirmModal(false);
+  };
+
   return (
     <>
       {openDM ? (
@@ -157,7 +243,8 @@ export default function Profile(props) {
                     <div className="d-flex flex-row justify-content-around w-50 my-3 pt-3">
                       <button
                         className="btn btn-primary"
-                        onClick={removeFriend}
+                        style={{ opacity: 0.7 }}
+                        onClick={() => setShowConfirmModal(true)}
                       >
                         Friends
                       </button>
@@ -172,6 +259,24 @@ export default function Profile(props) {
                     <button className="btn btn-primary" disabled>
                       Request Sent!
                     </button>
+                  ) : requestRecieved ? (
+                    <div className="mt-3">
+                      <p>{user.name} sent you friend request!</p>
+                      <div className="flex space-x-2">
+                        <button
+                          className="btn btn-success"
+                          onClick={handleAccept}
+                        >
+                          Accept
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={handleReject}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
                   ) : (
                     <button className="btn btn-primary" onClick={addFriend}>
                       Add Friend
@@ -182,6 +287,24 @@ export default function Profile(props) {
           </div>
         </div>
       )}
+
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Unfriend</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to unfriend {user.name}?</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmUnfriend}>
+            Unfriend
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
