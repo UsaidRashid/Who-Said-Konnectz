@@ -45,7 +45,7 @@ export default function Users() {
                         All Users
                     </h1>
                     <div className="flex flex-col space-y-6">
-                        {users.length > 0 ? (
+                        {users && users.length > 0 ? (
                             users.map((user) => (
                                 <div
                                     key={user._id}

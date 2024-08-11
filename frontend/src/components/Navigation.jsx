@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   BottomNavigation,
@@ -16,9 +16,46 @@ import Friends from "./Friends";
 import WhoSaid from "./WhoSaid";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HandshakeIcon from "@mui/icons-material/Handshake";
+import FriendRequests from "./FriendRequests";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
+  const [_id, setId] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setId(decodedToken.user._id);
+    }
+    const fetchToken = async () => {
+      try {
+        const response = await axios.post("http://localhost:3002/fetch-token",{_id});
+        if (response.status === 200) {
+          localStorage.clear();
+          localStorage.setItem("token", response.data.token);
+        }
+      } catch (error) {
+        console.error("Error in Logging in:", error);
+        console.log(error.response?.data?.message || "An error occurred");
+        if (error.response) {
+          alert(
+            "Error from server: " +
+              error.response.status +
+              " - " +
+              error.response.data.message
+          );
+        } else if (error.request) {
+          alert("No response from the server");
+        } else {
+          alert("Error setting up the request: " + error.message);
+        }
+      }
+    };
+    if (_id) fetchToken();
+  });
 
   const postCreated = () => {
     setValue(0);
@@ -35,6 +72,8 @@ export default function Navigation() {
       case 3:
         return <Friends />;
       case 4:
+        return <FriendRequests />;
+      case 5:
         return <Users />;
       default:
         return <Home />;
@@ -80,6 +119,11 @@ export default function Navigation() {
           <BottomNavigationAction
             className="text-white"
             label="Friends"
+            icon={<HandshakeIcon />}
+          />
+          <BottomNavigationAction
+            className="text-white"
+            label="Friend-Requests"
             icon={<HandshakeIcon />}
           />
           <BottomNavigationAction

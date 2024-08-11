@@ -8,6 +8,7 @@ export default function Profile(props) {
   const [user, setUser] = useState({ friends: [] });
   const [token, setToken] = useState();
   const [isFriend, setIsFriend] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
   const [openDM, setOpenDM] = useState(false);
 
   useEffect(() => {
@@ -25,20 +26,31 @@ export default function Profile(props) {
       ) {
         setIsFriend(true);
       }
+      if (
+        props.user &&
+        decodedToken &&
+        decodedToken?.user?.requestsSent?.some(
+          (friend) => friend._id === props.user._id
+        )
+      ) {
+        setRequestSent(true);
+      }
     }
   });
 
   const addFriend = async () => {
     try {
-      const response = await axios.post("http://localhost:3002/add-friend", {
-        toId: user._id,
-        fromId: token.user._id,
-      });
-      console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:3002/send-friend-request",
+        {
+          toId: user._id,
+          fromId: token.user._id,
+        }
+      );
       if (response.status === 200) {
-        alert("Friend Added Successfully");
+        alert("Friend Request Sent Successfully");
         setToken(response.data.token);
-        setIsFriend(true);
+        setRequestSent(true);
         localStorage.setItem("token", response.data.token);
       } else {
         alert(response.data.message || "Error Adding Friend");
@@ -156,6 +168,10 @@ export default function Profile(props) {
                         Message
                       </button>
                     </div>
+                  ) : requestSent ? (
+                    <button className="btn btn-primary" disabled>
+                      Request Sent!
+                    </button>
                   ) : (
                     <button className="btn btn-primary" onClick={addFriend}>
                       Add Friend

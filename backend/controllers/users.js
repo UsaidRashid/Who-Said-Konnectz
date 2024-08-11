@@ -57,9 +57,10 @@ module.exports.signUp = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.body.username }).populate(
-      "friends"
-    );
+    const user = await User.findOne({ username: req.body.username })
+      .populate("friends")
+      .populate("requestsRecieved")
+      .populate("requestsSent");
 
     const payload = { user: user };
     const token = jwt.sign(payload, "secretkey", { expiresIn: "1h" });
@@ -98,13 +99,24 @@ module.exports.fetchUsers = async (req, res) => {
 module.exports.sendFriendRequest = async (req, res) => {
   try {
     const { toId, fromId } = req.body;
-    const user1 = await User.findOne({ _id: toId });
-    const user2 = await User.findOne({ _id: fromId });
-    user1.requests.push(user2);
+    const user1 = await User.findOne({ _id: toId })
+      .populate("friends")
+      .populate("requestsSent")
+      .populate("requestsRecieved");
+    const user2 = await User.findOne({ _id: fromId })
+      .populate("friends")
+      .populate("requestsSent")
+      .populate("requestsRecieved");
+    user1.requestsRecieved.push(user2);
+    user2.requestsSent.push(user1);
     await user1.save();
+    await user2.save();
+    const token = jwt.sign({ user: user2 }, "secretkey", {
+      algorithm: "HS256",
+    });
     return res
       .status(200)
-      .json({ message: "Friend Request Sent Successfully!" });
+      .json({ message: "Friend Request Sent Successfully!", token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error", error });
@@ -114,7 +126,8 @@ module.exports.sendFriendRequest = async (req, res) => {
 module.exports.fetchFriendRequests = async (req, res) => {
   try {
     const { _id } = req.body;
-    const requests = await User.findOne({ _id }).populate("requests");
+    const user = await User.findOne({ _id }).populate("requestsRecieved");
+    const requests = user.requestsRecieved;
     return res
       .status(200)
       .json({ message: "Friend Requests Fetched Successfully", requests });
@@ -124,21 +137,51 @@ module.exports.fetchFriendRequests = async (req, res) => {
   }
 };
 
-module.exports.addFriend = async (req, res) => {
+module.exports.acceptFriendRequest = async (req, res) => {
   try {
+    console.log(req.body);
     const { toId, fromId } = req.body;
-    const user1 = await User.findOne({ _id: toId }).populate("friends");
-    const user2 = await User.findOne({ _id: fromId }).populate("friends");
+    const user1 = await User.findOne({ _id: toId })
+      .populate("requestsRecieved")
+      .populate("requestsSent")
+      .populate("friends");
+    const user2 = await User.findOne({ _id: fromId }).populate("requestsSent");
+    user1.requestsRecieved.pull(fromId);
+    user2.requestsSent.pull(toId);
     user1.friends.push(user2);
     user2.friends.push(user1);
     await user1.save();
     await user2.save();
-    const token = jwt.sign({ user: user2 }, "secretkey", {
+    const token = jwt.sign({ user: user1 }, "secretkey", {
       algorithm: "HS256",
     });
     return res
       .status(200)
-      .json({ message: "Friend Added Successfully", token });
+      .json({ message: "Friend Request Accepted Successfully", token });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error".error });
+  }
+};
+
+module.exports.rejectFriendRequest = async (req, res) => {
+  try {
+    
+    const { toId, fromId } = req.body;
+    const user1 = await User.findOne({ _id: toId }).populate(
+      "requestsRecieved"
+    );
+    const user2 = await User.findOne({ _id: fromId }).populate("requestsSent");
+    user1.requestsRecieved.pull(fromId);
+    user2.requestsSent.pull(toId);
+    await user1.save();
+    await user2.save();
+    const token = jwt.sign({ user: user1 }, "secretkey", {
+      algorithm: "HS256",
+    });
+    return res
+      .status(200)
+      .json({ message: "Friend Request Rejected Successfully" ,token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error", error });
@@ -179,6 +222,25 @@ module.exports.fetchFriends = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Friends Fetched Successfully", users: user.friends });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+module.exports.fetchToken = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const user = await User.findOne({ _id })
+      .populate("requestsRecieved")
+      .populate("requestsSent")
+      .populate("friends");
+    const token = jwt.sign({ user: user }, "secretkey", {
+      algorithm: "HS256",
+    });
+    return res
+      .status(200)
+      .json({ message: "Token Fetched Successfully", token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error", error });

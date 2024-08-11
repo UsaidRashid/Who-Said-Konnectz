@@ -20,7 +20,13 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  requests: [
+  requestsSent: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  requestsRecieved: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
