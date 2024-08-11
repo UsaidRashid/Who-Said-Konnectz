@@ -95,6 +95,35 @@ module.exports.fetchUsers = async (req, res) => {
   }
 };
 
+module.exports.sendFriendRequest = async (req, res) => {
+  try {
+    const { toId, fromId } = req.body;
+    const user1 = await User.findOne({ _id: toId });
+    const user2 = await User.findOne({ _id: fromId });
+    user1.requests.push(user2);
+    await user1.save();
+    return res
+      .status(200)
+      .json({ message: "Friend Request Sent Successfully!" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+module.exports.fetchFriendRequests = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const requests = await User.findOne({ _id }).populate("requests");
+    return res
+      .status(200)
+      .json({ message: "Friend Requests Fetched Successfully", requests });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
 module.exports.addFriend = async (req, res) => {
   try {
     const { toId, fromId } = req.body;

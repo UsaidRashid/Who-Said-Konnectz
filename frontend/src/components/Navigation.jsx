@@ -7,13 +7,15 @@ import {
   CssBaseline,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import ChatIcon from "@mui/icons-material/Chat";
 import AddIcon from "@mui/icons-material/Add";
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import Home from "./Home";
 import NewPost from "./NewPost";
 import Users from "./Users";
 import Friends from "./Friends";
 import WhoSaid from "./WhoSaid";
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import HandshakeIcon from "@mui/icons-material/Handshake";
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
@@ -68,7 +70,7 @@ export default function Navigation() {
           <BottomNavigationAction
             className="text-white"
             label="Who-Said"
-            icon={<HomeIcon />}
+            icon={<FormatQuoteIcon />}
           />
           <BottomNavigationAction
             className="text-white"
@@ -78,12 +80,12 @@ export default function Navigation() {
           <BottomNavigationAction
             className="text-white"
             label="Friends"
-            icon={<ChatIcon />}
+            icon={<HandshakeIcon />}
           />
           <BottomNavigationAction
             className="text-white"
             label="Users"
-            icon={<ChatIcon />}
+            icon={<PeopleOutlineIcon />}
           />
         </BottomNavigation>
       </Box>

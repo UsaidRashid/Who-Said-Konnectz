@@ -39,31 +39,34 @@ export default function WhoSaid() {
     <div className="container mx-auto my-48 p-4 border border-emerald-500 rounded-lg shadow-lg bg-white">
       <h2 className="text-2xl font-bold text-emerald-600 mb-4">Who Said</h2>
 
-      <div className="mb-4">
-        <div className="bg-emerald-100 p-4 rounded-lg h-64 overflow-y-scroll">
-          {sayings &&
-            sayings.map((saying, index) => (
-              <div key={index} className="p-2 mb-2 rounded-lg bg-emerald-200">
-                <p className="text-emerald-800">{saying?.said}</p>
-              </div>
-            ))}
-        </div>
+      <div className="d-flex flex-column justify-content-evenly mb-3">
+        {sayings &&
+          sayings.map((saying, index) => (
+            <div
+              key={index}
+              className="p-4 bg-emerald-100 border border-emerald-300 rounded-lg shadow-md mb-5"
+            >
+              <p className="text-emerald-800">{saying?.said}</p>
+            </div>
+          ))}
       </div>
 
-      <div className="mb-4 flex">
-        <input
-          type="text"
-          value={saying}
-          onChange={(e) => setSaying(e.target.value)}
-          placeholder="What do you want to say?"
-          className="form-control border-emerald-300 rounded-lg shadow-sm"
-        />
-        <button
-          onClick={saveSaying}
-          className="btn btn-emerald-600 text-white ms-2 bg-black"
-        >
-          Post
-        </button>
+      <div className="fixed bottom-12 left-0 w-full p-4 bg-white border-t border-emerald-300 shadow-lg">
+        <div className="flex items-center">
+          <input
+            type="text"
+            value={saying}
+            onChange={(e) => setSaying(e.target.value)}
+            placeholder="What do you want to say?"
+            className="form-control border-emerald-300 rounded-lg shadow-sm flex-grow"
+          />
+          <button
+            onClick={saveSaying}
+            className="btn btn-emerald-600 text-white ms-2 bg-black"
+          >
+            Post
+          </button>
+        </div>
       </div>
     </div>
   );

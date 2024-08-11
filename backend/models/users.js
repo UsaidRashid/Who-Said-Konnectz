@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  requests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 userSchema.plugin(passportLocalMongoose);
