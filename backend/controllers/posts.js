@@ -9,7 +9,7 @@ module.exports.createPost = async (req,res) => {
 
     const decodedToken =jwt.verify(token, "secretkey");
     
-    const authorDB =await User.find({_id:decodedToken.userId});
+    const authorDB =await User.find({_id:decodedToken.user._id});
     
     const authorId = authorDB[0]._id;
 

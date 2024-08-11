@@ -7,6 +7,8 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import Login from "./components/Login";
 import Navigation from "./components/Navigation";
+import Profile from "./components/Profile";
+import UserProfile from './components/UserProfile';
 
 const AppContent = () => {
   const location = useLocation();
@@ -19,6 +21,8 @@ const AppContent = () => {
         <Route path="/" element={<Navigation />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/user-profile" element={<UserProfile />} />
       </Routes>
     </>
   );

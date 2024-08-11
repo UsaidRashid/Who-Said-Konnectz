@@ -25,7 +25,6 @@ export default function NewPost({postCreated}) {
         alert(response.data.message);
         postCreated();
         navigate("/");
-        // return response.data;
       } else {
         alert("Unexpected status code: " + response.status);
       }

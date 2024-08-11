@@ -17,39 +17,11 @@ export default function Home() {
   if (storedToken) {
     const decodedToken = jwtDecode(storedToken);
 
-    if (!decodedToken.userId) {
+    if (!decodedToken.user._id) {
       alert("Token doesnt have userId");
       return;
     }
-    userId = decodedToken.userId;
-  }
-
-  async function logout() {
-    try {
-      const response = await axios.get("http://localhost:3002/logout");
-
-      if (response.status === 200) {
-        localStorage.removeItem("token");
-        alert(response.data.message);
-        navigate("/");
-      } else {
-        alert("Unexpected status code: " + response.status);
-      }
-    } catch (error) {
-      console.error("Error logging out:", error);
-      if (error.response) {
-        alert(
-          "Error from server: " +
-            error.response.status +
-            " - " +
-            error.response.data.message
-        );
-      } else if (error.request) {
-        alert("No response from the server");
-      } else {
-        alert("Error setting up the request: " + error.message);
-      }
-    }
+    userId = decodedToken.user._id;
   }
 
   useEffect(() => {
@@ -171,21 +143,7 @@ export default function Home() {
     }
   };
   return (
-    <div className="container my-36">
-      <div className="d-flex justify-content-end mb-4">
-        {localStorage.getItem("token") ? (
-          <button className="btn btn-danger" onClick={logout}>
-            Log out
-          </button>
-        ) : (
-          <button
-            className="btn btn-success"
-            onClick={() => navigate("/login")}
-          >
-            Log in
-          </button>
-        )}
-      </div>
+    <div className="container my-48">
       {posts && posts.length > 0 ? (
         <div className="d-flex flex-column gap-4 mx-60">
           {posts.map((post) => (
@@ -316,18 +274,6 @@ export default function Home() {
                           Add Comment!
                         </button>
                       </form>
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Close
-                      </button>
-                      <button type="button" className="btn btn-primary">
-                        Save changes
-                      </button>
                     </div>
                   </div>
                 </div>

@@ -31,7 +31,7 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="container mx-auto my-36 p-4 border border-emerald-500 rounded-lg shadow-lg bg-white">
+    <div className="container mx-auto my-48 p-4 border border-emerald-500 rounded-lg shadow-lg bg-white">
       <h2 className="text-2xl font-bold text-emerald-600 mb-4">Chat</h2>
 
       <div className="mb-4">

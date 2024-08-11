@@ -6,6 +6,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Home from './Home'; 
 import ChatBox from './Chatbox';
 import NewPost from './NewPost';
+import Users from './Users';
+import Friends from './Friends';
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
@@ -21,7 +23,9 @@ export default function Navigation() {
       case 1:
         return <NewPost postCreated={postCreated}/>;
       case 2:
-        return <ChatBox />;
+        return <Friends />;
+      case 3:
+        return <Users />;
       default:
         return <Home />;
     }
@@ -44,7 +48,8 @@ export default function Navigation() {
         >
           <BottomNavigationAction className='text-white' label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction className='text-white' label="New Post" icon={<AddIcon />} />
-          <BottomNavigationAction className='text-white' label="ChatBox" icon={<ChatIcon />} />
+          <BottomNavigationAction className='text-white' label="Friends" icon={<ChatIcon />} />
+          <BottomNavigationAction className='text-white' label="Users" icon={<ChatIcon />} />
         </BottomNavigation>
       </Box>
     </Container>
