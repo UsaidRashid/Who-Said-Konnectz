@@ -2,16 +2,23 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./UserProfile";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export default function Friends() {
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState();
-
-  const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
-  const _id = decodedToken.user._id;
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    let _id = null;
+    if (!token || token === "") {
+      alert("You must be logged in...");
+      navigate("/login");
+    } else {
+      const decodedToken = jwtDecode(token);
+      _id = decodedToken.user._id;
+    }
     const main = async () => {
       try {
         const response = await axios.post(
@@ -40,8 +47,8 @@ export default function Friends() {
         }
       }
     };
-    main();
-  });
+    if(token) main();
+  },[]);
 
   return (
     <div className="container mx-auto my-48  p-6 bg-emerald-100 rounded-lg shadow-lg">
@@ -50,7 +57,7 @@ export default function Friends() {
       ) : (
         <>
           <h1 className="text-3xl font-bold text-center text-emerald-800 mb-6">
-            All Users
+            All Friends
           </h1>
           <div className="flex flex-col space-y-6">
             {users.length > 0 ? (

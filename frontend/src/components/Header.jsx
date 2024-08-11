@@ -11,7 +11,7 @@ export default function Header() {
       if (response.status === 200) {
         localStorage.removeItem("token");
         alert(response.data.message);
-        navigate("/");
+        navigate("/login");
       } else {
         alert("Unexpected status code: " + response.status);
       }

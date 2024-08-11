@@ -10,14 +10,19 @@ export default function Profile(props) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const decodedToken = jwtDecode(storedToken);
     setUser(props.user);
-    setToken(decodedToken);
-    if (
-      props.user &&
-      decodedToken.user.friends.some((friend) => friend._id === props.user._id)
-    ) {
-      setIsFriend(true);
+    if (storedToken) {
+      const decodedToken = jwtDecode(storedToken);
+      setToken(decodedToken);
+      if (
+        props.user &&
+        decodedToken &&
+        decodedToken?.user?.friends?.some(
+          (friend) => friend._id === props.user._id
+        )
+      ) {
+        setIsFriend(true);
+      }
     }
   });
 
@@ -53,7 +58,7 @@ export default function Profile(props) {
     }
   };
 
-  const removeFriend = async  (req,res) =>{
+  const removeFriend = async (req, res) => {
     try {
       const response = await axios.post("http://localhost:3002/remove-friend", {
         toId: user._id,
@@ -82,8 +87,7 @@ export default function Profile(props) {
         alert("Error setting up the request: " + error.message);
       }
     }
-  }
-
+  };
 
   return (
     <div
@@ -129,7 +133,7 @@ export default function Profile(props) {
                 <p class="fs-5">{user?.contact}</p>
               </div>
             </div>
-            {token?.user?._id !== user?._id && (
+            {token && token?.user?._id !== user?._id && (
               <div className="d-flex flex-row justify-content-around w-50 my-3 pt-3">
                 {isFriend ? (
                   <button className="btn btn-primary" onClick={removeFriend}>
