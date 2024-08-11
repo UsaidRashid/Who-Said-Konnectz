@@ -1,32 +1,67 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
-const ChatBox = () => {
+const ChatBox = ({ fromId, toId }) => {
   const [message, setMessage] = useState("");
-  const [room, setRoom] = useState("");
   const [messages, setMessages] = useState([]);
-
-  const socket = io("http://localhost:3002");
-
+  const socketRef = useRef(null);
   useEffect(() => {
-    socket.on("receive-message", (message) => {
-      console.log("receive", message);
-      setMessages((messages) => [...messages, message]);
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.post(
+          `http://localhost:3002/messages/fetch-messages`,
+          { fromId, toId }
+        );
+        if (response.status === 200) {
+          setMessages(response.data.messages);
+        } else {
+          alert(response.data.message || "Error Fetching Messages");
+        }
+      } catch (error) {
+        console.error("Error in Fetching Messages:", error);
+        if (error.response) {
+          alert(
+            "Error from server: " +
+              error.response.status +
+              " - " +
+              error.response.data.message
+          );
+        } else if (error.request) {
+          alert("No response from the server");
+        } else {
+          alert("Error setting up the request: " + error.message);
+        }
+      }
+    };
+
+    fetchMessages();
+
+    socketRef.current = io("http://localhost:3002");
+
+    socketRef.current.emit("register_user", fromId);
+
+    socketRef.current.on("receive_dm", ({ fromId: senderId, message }) => {
+      console.log("Received message:", message);
+      if (senderId === toId || senderId === fromId) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { fromId: senderId, message },
+        ]);
+      }
     });
-  }, [socket]);
+
+    return () => {
+      socketRef.current.off("receive_dm");
+      socketRef.current.disconnect();
+    };
+  }, [fromId, toId]);
 
   const sendMessage = () => {
     if (message) {
-      socket.emit("send-message", { message, room });
+      socketRef.current.emit("send_dm", { fromId, toId, message });
       console.log("Sent message:", message);
       setMessage("");
-    }
-  };
-
-  const joinRoom = () => {
-    if (room) {
-      socket.emit("join_room", room);
-      console.log("room joined");
     }
   };
 
@@ -39,9 +74,17 @@ const ChatBox = () => {
           {messages.map((msg, index) => (
             <div
               key={index}
-              className="bg-emerald-50 p-2 mb-2 rounded-lg shadow-sm"
+              className={`p-2 mb-2 rounded-lg shadow-sm ${
+                msg.fromId === fromId ? "bg-emerald-50" : "bg-emerald-200"
+              }`}
             >
-              <p className="text-emerald-800">{msg}</p>
+              <p
+                className={`text-emerald-800 ${
+                  msg.fromId === fromId ? "text-right" : "text-left"
+                }`}
+              >
+                {msg.message}
+              </p>
             </div>
           ))}
         </div>
@@ -61,25 +104,6 @@ const ChatBox = () => {
         >
           Send
         </button>
-      </div>
-
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold text-emerald-600 mb-2">Room</h3>
-        <div className="mb-2">
-          <input
-            type="text"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            placeholder="Enter your room"
-            className="form-control border-emerald-300  rounded-lg shadow-sm"
-          />
-          <button
-            onClick={joinRoom}
-            className="btn btn-emerald-600 bg-black text-white mt-2"
-          >
-            Join
-          </button>
-        </div>
       </div>
     </div>
   );
