@@ -66,9 +66,17 @@ export default function AllDms() {
                 className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg hover:bg-emerald-50 transition duration-200 cursor-pointer"
                 onClick={() => setUser(user)}
               >
-                <span className="text-emerald-900 font-semibold">
-                  {user.name}
-                </span>
+                <div className="d-flex flex-row">
+                  <img
+                    src={user.profilePic}
+                    height="40px"
+                    width="40px"
+                    className="rounded-circle mx-3"
+                  />
+                  <span className="text-emerald-900 font-semibold mt-1 ms-1">
+                    {user.name}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>

@@ -159,7 +159,7 @@ export default function Home() {
               }}
             >
               <div className="card-body">
-                <div className="d-flex flex-row justify-content-evenly w-25">
+                <div className="d-flex flex-row justify-content-evenly w-50">
                   <img
                     src={post.profilePic}
                     alt=""
@@ -167,7 +167,7 @@ export default function Home() {
                     width="40px"
                     className="rounded-circle"
                   />
-                  <h5 className="card-title text-emerald-600 mt-2">
+                  <h5 className="card-title text-emerald-600 mt-2 ms-3 w-100">
                     {post.author}
                   </h5>
                 </div>
