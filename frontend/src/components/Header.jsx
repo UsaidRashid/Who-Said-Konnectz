@@ -88,26 +88,34 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  {isLoggedin ? (
-                    <li>
-                      <button
-                        className="dropdown-item btn-logout"
-                        onClick={logout}
-                      >
-                        <i className="fas fa-sign-out-alt me-2"></i> Log out
-                      </button>
-                    </li>
-                  ) : (
-                    <li>
-                      <button
-                        className="dropdown-item btn-login"
-                        onClick={() => navigate("/login")}
-                      >
-                        <i className="fas fa-sign-in-alt me-2"></i> Log in
-                      </button>
-                    </li>
-                  )}
+                  <Link to="/friends" className="dropdown-item">
+                    <i className="fas fa-user-friends me-2"></i> Your Friends
+                  </Link>
                 </li>
+                <li>
+                  <Link to="/friend-requests" className="dropdown-item">
+                    <i className="fas fa-user-plus me-2"></i> Friend Requests
+                  </Link>
+                </li>
+                {isLoggedin ? (
+                  <li>
+                    <button
+                      className="dropdown-item btn-logout"
+                      onClick={logout}
+                    >
+                      <i className="fas fa-sign-out-alt me-2"></i> Log out
+                    </button>
+                  </li>
+                ) : (
+                  <li>
+                    <button
+                      className="dropdown-item btn-login"
+                      onClick={() => navigate("/login")}
+                    >
+                      <i className="fas fa-sign-in-alt me-2"></i> Log in
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
           </div>

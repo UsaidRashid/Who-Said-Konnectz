@@ -12,15 +12,11 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import Home from "./Home";
 import NewPost from "./NewPost";
 import Users from "./Users";
-import Friends from "./Friends";
 import WhoSaid from "./WhoSaid";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import FriendRequests from "./FriendRequests";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import AllDms from "./AllDms";
+import '../styles/navigation.css';
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
@@ -34,7 +30,9 @@ export default function Navigation() {
     }
     const fetchToken = async () => {
       try {
-        const response = await axios.post("http://localhost:3002/fetch-token",{_id});
+        const response = await axios.post("http://localhost:3002/fetch-token", {
+          _id,
+        });
         if (response.status === 200) {
           localStorage.clear();
           localStorage.setItem("token", response.data.token);
@@ -57,7 +55,7 @@ export default function Navigation() {
       }
     };
     if (_id) fetchToken();
-  });
+  }, [_id]);
 
   const postCreated = () => {
     setValue(0);
@@ -68,16 +66,10 @@ export default function Navigation() {
       case 0:
         return <Home />;
       case 1:
-        return <AllDms/>;
-      case 2:
         return <WhoSaid />;
-      case 3:
+      case 2:
         return <NewPost postCreated={postCreated} />;
-      case 4:
-        return <Friends />;
-      case 5:
-        return <FriendRequests />;
-      case 6:
+      case 3:
         return <Users />;
       default:
         return <Home />;
@@ -97,23 +89,12 @@ export default function Navigation() {
           onChange={(event, newValue) => {
             setValue(newValue);
           }}
-          sx={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: "black",
-          }}
+          className="bottom-nav"
         >
           <BottomNavigationAction
             className="text-white"
             label="Home"
             icon={<HomeIcon />}
-          />
-           <BottomNavigationAction
-            className="text-white"
-            label="Chats"
-            icon={<ChatBubbleOutlineIcon />}
           />
           <BottomNavigationAction
             className="text-white"
@@ -124,16 +105,6 @@ export default function Navigation() {
             className="text-white"
             label="New Post"
             icon={<AddIcon />}
-          />
-          <BottomNavigationAction
-            className="text-white"
-            label="Friends"
-            icon={<HandshakeIcon />}
-          />
-          <BottomNavigationAction
-            className="text-white"
-            label="Friend-Requests"
-            icon={<HandshakeIcon />}
           />
           <BottomNavigationAction
             className="text-white"
