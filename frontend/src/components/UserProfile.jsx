@@ -4,6 +4,7 @@ import axios from "axios";
 import ChatBox from "./Chatbox";
 import { jwtDecode } from "jwt-decode";
 import { Modal, Button } from "react-bootstrap";
+import '../styles/profile.css'
 
 export default function Profile(props) {
   const [user, setUser] = useState({ friends: [] });
@@ -190,106 +191,109 @@ export default function Profile(props) {
   };
 
   return (
-    <>
+    <div className="bg-emerald-100 min-h-screen py-6 px-4">
       {openDM ? (
         <ChatBox fromId={token.user._id} toId={user._id} />
       ) : (
-        <div
-          class="container rounded bg-white"
-          style={{
-            boxShadow: "9px 9px 14px rgb(0 ,0, 0, .371)",
-            border: "1px solid black",
-          }}
-        >
-          <div class="row">
-            <div class=" col-md-7 border-right">
-              <div class="d-flex flex-column align-items-center text-center p-5 py-5">
-                <img
-                  class="rounded-circle mt-5"
-                  width="150px"
-                  height="150px"
-                  src={user.profilePic}
-                  alt={profile}
-                />
+        <div className="relative overflow-hidden bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out">
+          <div className="container rounded bg-white mb-4 transition-transform transform hover:scale-105 duration-300 ease-in-out">
+            <div className="row">
+              <div className="col-md-7 border-right">
+                <div className="d-flex flex-column align-items-center text-center p-5 py-5">
+                  <img
+                    className="rounded-circle mt-5 transition-transform transform hover:scale-110 duration-300 ease-in-out"
+                    width="150px"
+                    height="150px"
+                    src={user.profilePic || profile}
+                    alt="Profile"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="col-md-5 border-right">
-              <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h4 class="text-right fw-bold fs-4">User Profile</h4>
-                </div>
-                <div class="row mt-1">
-                  <div class="col-md-12">
-                    <label class="labels fw-bold fs-5"> Name</label>
-                    <p class="fs-5">{user?.name}</p>
+              <div className="col-md-5 border-right">
+                <div className="p-3 py-5">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right fw-bold fs-4 transition-transform transform hover:translate-x-2 duration-300 ease-in-out">
+                      User Profile
+                    </h4>
                   </div>
-                  <div class="col-md-12">
-                    <label class="labels fw-bold fs-5">User name</label>
-                    <p class="fs-5">{user?.username}</p>
+                  <div className="row mt-1">
+                    <div className="col-md-12">
+                      <label className="labels fw-bold fs-5">Name</label>
+                      <p className="fs-5">{user?.name}</p>
+                    </div>
+                    <div className="col-md-12">
+                      <label className="labels fw-bold fs-5">Username</label>
+                      <p className="fs-5">{user?.username}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="row mt-1">
-                  <div class="col-md-12">
-                    <label class="labels fw-bold fs-5">Email ID</label>
-                    <p class="fs-5">{user?.email}</p>
+                  <div className="row mt-1">
+                    <div className="col-md-12">
+                      <label className="labels fw-bold fs-5">Email ID</label>
+                      <p className="fs-5">{user?.email}</p>
+                    </div>
+                    <div className="col-md-12">
+                      <label className="labels fw-bold fs-5">Mobile Number</label>
+                      <p className="fs-5">{user?.contact}</p>
+                    </div>
                   </div>
-                  <div class="col-md-12">
-                    <label class="labels fw-bold fs-5">Mobile Number</label>
-                    <p class="fs-5">{user?.contact}</p>
-                  </div>
-                </div>
-                {token &&
-                  token?.user?._id !== user?._id &&
-                  (isFriend ? (
+                  {token && token?.user?._id !== user?._id && (
                     <div className="d-flex flex-row justify-content-around w-50 my-3 pt-3">
-                      <button
-                        className="btn btn-primary"
-                        style={{ opacity: 0.7 }}
-                        onClick={() => setShowConfirmModal(true)}
-                      >
-                        Friends
-                      </button>
-                      <button
-                        className="btn btn-success"
-                        onClick={() => setOpenDM(true)}
-                      >
-                        Message
-                      </button>
-                    </div>
-                  ) : requestSent ? (
-                    <button className="btn btn-primary" disabled>
-                      Request Sent!
-                    </button>
-                  ) : requestRecieved ? (
-                    <div className="mt-3">
-                      <p>{user.name} sent you friend request!</p>
-                      <div className="flex space-x-2">
-                        <button
-                          className="btn btn-success"
-                          onClick={handleAccept}
-                        >
-                          Accept
+                      {isFriend ? (
+                        <>
+                          <button
+                            className="btn btn-primary transition-opacity duration-300 ease-in-out hover:opacity-100"
+                            style={{ opacity: 0.7 }}
+                            onClick={() => setShowConfirmModal(true)}
+                          >
+                            Friends
+                          </button>
+                          <button
+                            className="btn btn-success transition-transform duration-300 ease-in-out hover:scale-105"
+                            onClick={() => setOpenDM(true)}
+                          >
+                            Message
+                          </button>
+                        </>
+                      ) : requestSent ? (
+                        <button className="btn btn-primary" disabled>
+                          Request Sent!
                         </button>
+                      ) : requestRecieved ? (
+                        <div className="mt-3">
+                          <p>{user.name} sent you a friend request!</p>
+                          <div className="flex space-x-2">
+                            <button
+                              className="btn btn-success transition-transform duration-300 ease-in-out hover:scale-105"
+                              onClick={handleAccept}
+                            >
+                              Accept
+                            </button>
+                            <button
+                              className="btn btn-danger transition-transform duration-300 ease-in-out hover:scale-105"
+                              onClick={handleReject}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
                         <button
-                          className="btn btn-danger"
-                          onClick={handleReject}
+                          className="btn btn-primary transition-transform duration-300 ease-in-out hover:scale-105"
+                          onClick={addFriend}
                         >
-                          Reject
+                          Add Friend
                         </button>
-                      </div>
+                      )}
                     </div>
-                  ) : (
-                    <button className="btn btn-primary" onClick={addFriend}>
-                      Add Friend
-                    </button>
-                  ))}
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} className="transition-opacity duration-300 ease-in-out">
         <Modal.Header closeButton>
           <Modal.Title>Confirm Unfriend</Modal.Title>
         </Modal.Header>
@@ -298,14 +302,19 @@ export default function Profile(props) {
           <Button
             variant="secondary"
             onClick={() => setShowConfirmModal(false)}
+            className="transition-colors duration-300 ease-in-out hover:bg-gray-300"
           >
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleConfirmUnfriend}>
+          <Button
+            variant="danger"
+            onClick={handleConfirmUnfriend}
+            className="transition-colors duration-300 ease-in-out hover:bg-red-600"
+          >
             Unfriend
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }

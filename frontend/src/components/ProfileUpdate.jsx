@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import '../styles/updateProfile.css'
 
 export default function ProfileUpdate() {
   const token = localStorage.getItem("token");
@@ -76,89 +77,67 @@ export default function ProfileUpdate() {
   };
 
   return (
-    <>
-      <div className=" mt-48 container-fluid bg-white mx-96">
-        <div className="row">
-          <div className="col-md-6 ">
-            <h3 className="text-center mt-3 text-dark">
-              <b>Update your profile!</b>
-            </h3>
-            <form className="mx-5 mb-5" onSubmit={handleSubmit}>
-              <div className="form-group mt-3">
-                <label
-                  className="text-dark fw-bold fs-5"
-                  style={{ marginTop: "20px" }}
-                >
-                  Name
-                </label>
-                <input
-                  type="name"
-                  name="name"
-                  className="form-control border border-2 border-black p-2 border rounded-3 h3"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label
-                  className="text-dark fw-bold fs-5"
-                  style={{ marginTop: "10px" }}
-                >
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control mb-1 border border-2 border-black p-2 border rounded-3 h3"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label
-                  className="text-dark fw-bold fs-5"
-                  style={{ marginTop: "12px" }}
-                >
-                  Contact No
-                </label>
-                <input
-                  type="number"
-                  name="contact"
-                  className="form-control mb-1 border border-2 border-black p-2 border rounded-3 h3"
-                  value={formData.contact}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label
-                  className="text-dark fw-bold fs-5"
-                  style={{ marginTop: "12px" }}
-                >
-                  Profile Picture
-                </label>
-                <input
-                  type="file"
-                  className="form-control mb-1"
-                  name="profilePic"
-                  onChange={handleChange}
-                />
-              </div>
-              <button
-                class="btn btn-primary profile-button fs-5"
-                style={{
-                  marginTop: "23px",
-                  boxShadow: "3px 3px 10px rgb(0 ,0, 0, .61)",
-                  width: "130px",
-                  height: "45px",
-                }}
-                type="submit"
-              >
-                <b>Update</b>
-              </button>
-            </form>
+    <div className="profile-update-container mt-10">
+      <div className="form-container">
+        <h3 className="text-center text-dark font-weight-bold fs-4 mb-4">
+          Update your profile!
+        </h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+            <label className="text-dark font-weight-bold fs-5">
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </div>
-        </div>
+          <div className="form-group mb-3">
+            <label className="text-dark font-weight-bold fs-5">
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group mb-3">
+            <label className="text-dark font-weight-bold fs-5">
+              Contact No
+            </label>
+            <input
+              type="number"
+              name="contact"
+              className="form-control"
+              value={formData.contact}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group mb-3">
+            <label className="text-dark font-weight-bold fs-5">
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              name="profilePic"
+              className="form-control"
+              onChange={handleChange}
+            />
+          </div>
+          <button
+            className="btn btn-primary fs-5"
+            type="submit"
+          >
+            <b>Update</b>
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 }

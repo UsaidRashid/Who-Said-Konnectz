@@ -1,0 +1,85 @@
+/* profile.css */
+
+/* Full-page emerald background */
+.bg-emerald-100 {
+    background-color: #d4edda; /* Adjust as needed for your emerald shade */
+  }
+  
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .relative {
+    position: relative;
+  }
+  
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .transition-transform {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .transition-opacity {
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .transition-colors {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .transform {
+    transform: translateZ(0);
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  .hover\:scale-110:hover {
+    transform: scale(1.1);
+  }
+  
+  .hover\:opacity-100:hover {
+    opacity: 1;
+  }
+  
+  .hover\:translate-x-2:hover {
+    transform: translateX(0.5rem);
+  }
+  
+  .hover\:scale-105 {
+    transform: scale(1.05);
+  }
+  
+  .hover\:translate-x-2 {
+    transform: translateX(0.5rem);
+  }
+  
+  .bg-white {
+    background-color: #fff;
+  }
+  
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .p-6 {
+    padding: 1.5rem;
+  }
+  
+  .py-6 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
