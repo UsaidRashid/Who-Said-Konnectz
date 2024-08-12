@@ -7,6 +7,7 @@ import {
   setPassword,
   setUsername,
   setId,
+  setProfilePic
 } from "../store/Features/userSlice";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,14 +15,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Input from '@mui/material/Input';
 
 function Copyright(props) {
   return (
@@ -40,18 +40,37 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const dispatch = useDispatch();
-  const { username, email, name, contact, password, id } = useSelector(
+  const { username, email, name, contact, password, id, profilePic } = useSelector(
     (state) => state.user
   );
   const navigate = useNavigate();
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      dispatch(setProfilePic(file));
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('name', name);
+    formData.append('contact', contact);
+    formData.append('password', password);
+    formData.append('profilePic', profilePic);
+
     try {
-      const userData = { username, email, name, contact, password };
       const response = await axios.post(
         "http://localhost:3002/signup",
-        userData
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        }
       );
 
       if (response.status === 200) {
@@ -163,7 +182,14 @@ export default function SignUp() {
                   onChange={(e) => dispatch(setPassword(e.target.value))}
                 />
               </Grid>
-
+              <Grid item xs={12}>
+                <Input
+                  accept="image/*"
+                  type="file"
+                  onChange={handleFileChange}
+                  sx={{ mt: 2 }}
+                />
+              </Grid>
             </Grid>
             <Button
               type="submit"

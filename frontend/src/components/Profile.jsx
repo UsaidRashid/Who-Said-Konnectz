@@ -1,8 +1,11 @@
 import React from "react";
 import profile from "../Images/profile.png";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Profile() {
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   let decodedToken = null;
@@ -58,7 +61,13 @@ export default function Profile() {
                   <label class="labels fw-bold fs-5">Mobile Number</label>
                   <p class="fs-5">{decodedToken.user?.contact}</p>
                 </div>
+                {/* <div className="d-flex flex-row justify-content-evenly"> */}
+                    
+                {/* </div> */}
               </div>
+              <button className="mt-3 btn btn-outline-success" onClick={()=>navigate('/profile-update')}>
+                      Update
+                    </button>
             </div>
           </div>
         </div>

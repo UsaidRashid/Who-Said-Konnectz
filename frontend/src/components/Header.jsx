@@ -1,9 +1,26 @@
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import profile from "../Images/profile.png";
+import { useState , useEffect} from "react";
+import {jwtDecode} from 'jwt-decode';
 
 export default function Header() {
   const navigate = useNavigate();
+  const [profilePic,setProfilePic] = useState('');
+  const [token,setToken] = useState('');
+  const [isLoggedin,setIsLoggedIn] =useState(false);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    let decodedToken = '';
+    if (token) {
+      decodedToken = jwtDecode(token);
+    }
+    setProfilePic(decodedToken?.user?.profilePic);
+    if (token !== null) setIsLoggedIn(true);
+    else setIsLoggedIn(false);
+  });
+
   async function logout() {
     try {
       const response = await axios.get("http://localhost:3002/logout");
@@ -40,7 +57,7 @@ export default function Header() {
           <p className="ms-96 text-white">Connecting Forever...</p>
         </div>
         <div className="d-flex flex-row w-50 justify-content-evenly me-5">
-          {localStorage.getItem("token") ? (
+          {isLoggedin ? (
             // <div className="d-flex flex-row justify-content-evenly w-50">
             <button
               className="btn btn-danger rounded-pill w-50"
@@ -61,7 +78,7 @@ export default function Header() {
             {" "}
             <img
               className=" bottom-0 start-0"
-              src={profile}
+              src={profilePic? profilePic:profile}
               style={{
                 height: "50px",
                 width: "50px",

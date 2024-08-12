@@ -1,8 +1,12 @@
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
 
 module.exports.signUp = async (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
   let { name, email, password, contact, username } = req.body;
+  const profilePic = req.file ? req.file.path : null;
 
   if (!name || !email || !contact || !password || !username) {
     return res.status(400).json({ message: "Please fill in all fields" });
@@ -28,9 +32,16 @@ module.exports.signUp = async (req, res) => {
       email,
       contact,
       name,
+      profilePic,
     });
-
     const registeredUser = await User.register(newUser, req.body.password);
+
+    if (profilePic) {
+      const cloudinaryUrl = cloudinary.url(profilePic, {
+        secure: true,
+      });
+      registeredUser.profilePic = cloudinaryUrl;
+    }
 
     req.login(registeredUser, (err) => {
       if (err) {
@@ -82,6 +93,66 @@ module.exports.logout = (req, res) => {
     }
     res.status(200).json({ message: "Logged out successfully" });
   });
+};
+
+module.exports.updateDetails = async (req, res) => {
+  try {
+    const { name, email, contact, token } = req.body;
+    const profilePic = req.file ? req.file.filename : null;
+
+    if (!name || !email)
+      return res
+        .status(400)
+        .json({ message: "Required Fields shouldn't be ignored!" });
+
+    if (!token)
+      return res
+        .status(400)
+        .json({ message: "Something went wrong! Are you logged in?" });
+
+    const decodedToken = jwt.verify(token, "secretkey");
+
+    const username = decodedToken.user.username;
+
+    const updatedProfile = {
+      name,
+      email,
+      contact,
+      profilePic,
+    };
+
+    if (profilePic) {
+      const cloudinaryUrl = cloudinary.url(profilePic, {
+        secure: true,
+      });
+      updatedProfile.profilePic = cloudinaryUrl;
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      updatedProfile,
+      { new: true, runValidators: true }
+    )
+      .populate("friends")
+      .populate("requestsSent")
+      .populate("requestsRecieved");
+
+    const newToken = jwt.sign({ user: updatedUser }, 'secretkey', {
+      algorithm: "HS256",
+    });
+
+    if (!updatedUser)
+      return res.status(400).json({
+        message: "Couldn't find user profile ! Please try logging in again",
+      });
+
+    return res
+      .status(200)
+      .json({ message: "User Updated successfully", token: newToken });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
 };
 
 module.exports.fetchUsers = async (req, res) => {

@@ -2,32 +2,26 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3002;
+const path = require('path');
 
-const { Server } = require("socket.io");
 const { createServer } = require("node:http");
+const { Server } = require("socket.io");
 const server = createServer(app);
 
-const mongoose = require("mongoose");
-const mongoUrl = "mongodb://127.0.0.1:27017/Who-Said-Konnectz";
+require('./configs/dbConfig');
+require('./configs/multerConfig');
+const sessionConfig = require("./configs/sessionConfig");
+const passport = require("./configs/passportConfig");
 
-main()
-  .then(() => {
-    console.log("Successfully connected to Who-Said Konnectz Database");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-async function main() {
-  await mongoose.connect(mongoUrl);
-}
-
-const User = require("./models/users");
 const MessagesController = require("./controllers/messages");
 
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, './configs/uploads')));
+app.use(sessionConfig);
+app.use(passport.initialize());
+app.use(passport.session());
 
 const io = new Server(server, {
   cors: {
@@ -81,28 +75,6 @@ io.on("connection", (socket) => {
   });
 });
 
-const session = require("express-session");
-const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
-
-const sessionOptions = {
-  secret: "supersecret",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    secure: true,
-  },
-};
-
-app.use(session(sessionOptions));
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new localStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 app.use((err, req, res, next) => {
   console.error(err);
