@@ -1,9 +1,12 @@
 const Post = require("../models/posts");
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
 
 module.exports.createPost = async (req, res) => {
   const { content, token } = req.body;
+
+  const postPic = req.file ? req.file.path : null;
 
   const decodedToken = jwt.verify(token, "secretkey");
 
@@ -12,7 +15,14 @@ module.exports.createPost = async (req, res) => {
   const authorId = authorDB[0]._id;
 
   try {
-    const newPost = new Post({ author: authorId, content });
+    const newPost = new Post({ author: authorId, content, postPic });
+
+    if (postPic) {
+      const cloudinaryUrl = cloudinary.url(postPic, {
+        secure: true,
+      });
+      newPost.postPic = cloudinaryUrl;
+    }
 
     await newPost.save();
 

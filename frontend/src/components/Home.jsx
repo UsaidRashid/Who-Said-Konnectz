@@ -38,6 +38,7 @@ export default function Home() {
               _id: post._id,
               content: post.content,
               author: post.author.name,
+              postPic : post.postPic,
               profilePic: post.author.profilePic,
               likes: post.likes,
               comments: post.comments.map((comment) => ({
@@ -170,7 +171,11 @@ export default function Home() {
                     {post.author}
                   </h5>
                 </div>
-                <p className="card-text mb-4">{post.content}</p>
+               
+                <p className="card-text my-4">{post.content}</p>
+                {post.postPic && 
+                  <img src={post.postPic} alt="" height='100%' width='100%' />
+                }
                 <div className="mb-3 text-center">
                   <span className="badge bg-light text-dark me-2">
                     {post.likes.length} Likes
@@ -266,7 +271,7 @@ export default function Home() {
                                 >
                                   {comment.isCommentLiked ? "Unlike" : "Like"}
                                 </button>
-                                {/* Add reply button if needed */}
+                                
                               </div>
                             </div>
                           </div>

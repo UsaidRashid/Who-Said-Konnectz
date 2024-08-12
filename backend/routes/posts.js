@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const postsController = require("../controllers/posts");
-const { isLoggedIn } = require("../middleware");
+const upload = require('../configs/multerConfig');
 
-router.route("/new").post(postsController.createPost);
+router.route("/new").post( upload.single('postPic') , postsController.createPost);
 
 router.route("/fetch").get(postsController.fetchPosts);
 

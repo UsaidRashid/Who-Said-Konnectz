@@ -2,22 +2,33 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
-export default function NewPost({postCreated}) {
+export default function NewPost({ postCreated }) {
   const navigate = useNavigate();
   const [postText, setPostText] = useState("");
+  const [postPic, setPostPic] = useState(null);
 
   async function createPost() {
     try {
       const content = postText;
       const storedToken = localStorage.getItem("token");
-      const response = await axios.post("http://localhost:3002/posts/new", {
-        content,
-        token: storedToken,
-      });
+      const formData = new FormData();
+      formData.append("content", content);
+      formData.append("postPic", postPic);
+      formData.append("token", storedToken);
+
+      const response = await axios.post(
+        "http://localhost:3002/posts/new",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 401) {
         alert("You must be Logged in!");
-        
+
         navigate("/");
       }
 
@@ -66,6 +77,7 @@ export default function NewPost({postCreated}) {
           onChange={handlePostTextChange}
           placeholder="What's on your mind?"
         ></textarea>
+        <input type="file" onChange={(e) => setPostPic(e.target.files[0])} />
         <button className="btn btn-success float-right" onClick={createPost}>
           Create Post
         </button>
