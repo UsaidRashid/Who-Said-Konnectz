@@ -1,6 +1,7 @@
 import "./App.css";
 import { Route, BrowserRouter, Routes, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/js/bootstrap.bundle.min';  
 import Header from "./components/Header";
 import SignUp from "./components/SignUp";
 import { Provider } from "react-redux";
@@ -10,6 +11,7 @@ import Navigation from "./components/Navigation";
 import Profile from "./components/Profile";
 import UserProfile from './components/UserProfile';
 import ProfileUpdate from './components/ProfileUpdate';
+import AllDms from "./components/AllDms";
 
 const AppContent = () => {
   const location = useLocation();
@@ -25,6 +27,7 @@ const AppContent = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/profile-update" element={<ProfileUpdate />} />
+        <Route path="/chats" element={<AllDms />} />
       </Routes>
     </>
   );

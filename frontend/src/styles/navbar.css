@@ -1,0 +1,75 @@
+.navbar-container {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.emerald-gradient {
+  background: linear-gradient(135deg, #1d976c, #93f9b9);
+}
+
+.btn-login:hover,
+.btn-logout:hover,
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.hover-effect {
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+}
+
+.hover-effect h1 {
+  transition: color 0.3s ease-in-out;
+}
+
+.hover-effect:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-effect:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.hover-effect:hover h1 {
+  color: #e0f7fa;
+  transform: scale(1.05);
+}
+
+.chat-icon {
+  transition: transform 0.3s ease-in-out;
+}
+
+.chat-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Custom Dropdown Styles */
+.dropdown-menu {
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #1d976c;
+  color: #fff;
+}
