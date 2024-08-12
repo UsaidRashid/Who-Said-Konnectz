@@ -33,7 +33,8 @@ export default function Profile() {
                 class="rounded-circle mt-5"
                 width="150px"
                 height="150px"
-                src={profile}
+                src={decodedToken.user.profilePic}
+                alt={profile}
               />
             </div>
           </div>
@@ -61,9 +62,7 @@ export default function Profile() {
                   <label class="labels fw-bold fs-5">Mobile Number</label>
                   <p class="fs-5">{decodedToken.user?.contact}</p>
                 </div>
-                {/* <div className="d-flex flex-row justify-content-evenly"> */}
-                    
-                {/* </div> */}
+                
               </div>
               <button className="mt-3 btn btn-outline-success" onClick={()=>navigate('/profile-update')}>
                       Update

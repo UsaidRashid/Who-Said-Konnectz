@@ -121,11 +121,21 @@ export default function FriendRequests() {
                 className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="flex-1">
-                  <h2 className="text-xl font-semibold text-emerald-700">
-                    {user.name}
-                  </h2>
-                  <p className="text-gray-600">{user.email}</p>
-                  <p className="text-gray-500 text-sm">{user.username}</p>
+                  <div className="d-flex flex-row">
+                    <img
+                      src={user.profilePic}
+                      height="40px"
+                      width="40px"
+                      className="rounded-circle"
+                    />
+                    <div className="mx-5">
+                      <h2 className="text-xl font-semibold text-emerald-700">
+                        {user.name}
+                      </h2>
+                      <p className="text-gray-600">{user.email}</p>
+                      <p className="text-gray-500 text-sm">{user.username}</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex space-x-2">
                   <button

@@ -29,7 +29,7 @@ export default function Home() {
       try {
         const response = await axios.get("http://localhost:3002/posts/fetch");
 
-        // console.log(response.data.posts[1].comments[0].likes);
+        console.log("response", response.data.posts);
         dispatch(
           setPosts(
             response.data.posts.map((post) => ({
@@ -38,6 +38,7 @@ export default function Home() {
               _id: post._id,
               content: post.content,
               author: post.author.name,
+              profilePic: post.author.profilePic,
               likes: post.likes,
               comments: post.comments.map((comment) => ({
                 ...comment,
@@ -157,9 +158,18 @@ export default function Home() {
               }}
             >
               <div className="card-body">
-                <h5 className="card-title text-emerald-600 mb-2">
-                  {post.author}
-                </h5>
+                <div className="d-flex flex-row justify-content-evenly w-25">
+                  <img
+                    src={post.profilePic}
+                    alt=""
+                    height="40px"
+                    width="40px"
+                    className="rounded-circle"
+                  />
+                  <h5 className="card-title text-emerald-600 mt-2">
+                    {post.author}
+                  </h5>
+                </div>
                 <p className="card-text mb-4">{post.content}</p>
                 <div className="mb-3 text-center">
                   <span className="badge bg-light text-dark me-2">
@@ -187,7 +197,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Modal */}
               <div
                 className="modal fade"
                 id={`commentsModal-${post._id}`}
@@ -218,15 +227,24 @@ export default function Home() {
                             key={comment._id}
                             className="card border-emerald-600 shadow-lg mb-4"
                             style={{
-                              border: "1px solid #4CAF50", // Emerald border
+                              border: "1px solid #4CAF50",
                               borderRadius: "8px",
                               overflow: "hidden",
                             }}
                           >
                             <div className="card-body">
-                              <h6 className="card-title text-emerald-600 mb-2">
-                                {comment.author.name}
-                              </h6>
+                              <div className="d-flex flex-row justify-content-evenly w-25">
+                                <img
+                                  src={comment.author.profilePic}
+                                  alt=""
+                                  height="40px"
+                                  width="40px"
+                                  className="rounded-circle"
+                                />
+                                <h5 className="card-title text-emerald-600 mt-2">
+                                  {comment.author.name}
+                                </h5>
+                              </div>
                               <p className="card-text mb-4">
                                 {comment.content}
                               </p>
@@ -234,7 +252,6 @@ export default function Home() {
                                 <span className="badge bg-light text-dark me-2">
                                   {comment.likes.length} Likes
                                 </span>
-                                {/* Add another badge for replies if needed */}
                               </div>
                               <div className="d-flex justify-content-between">
                                 <button

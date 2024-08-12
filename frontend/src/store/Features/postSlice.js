@@ -6,6 +6,7 @@ const initialState = {
     likes : [],
     content : '',
     author : '',
+    profilePic : '',
     comments : 
     [{
       _id:'',

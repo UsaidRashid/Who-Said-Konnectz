@@ -208,7 +208,8 @@ export default function Profile(props) {
                   class="rounded-circle mt-5"
                   width="150px"
                   height="150px"
-                  src={profile}
+                  src={user.profilePic}
+                  alt={profile}
                 />
               </div>
             </div>
