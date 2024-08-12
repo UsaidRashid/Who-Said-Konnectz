@@ -4,7 +4,8 @@ import axios from "axios";
 import ChatBox from "./Chatbox";
 import { jwtDecode } from "jwt-decode";
 import { Modal, Button } from "react-bootstrap";
-import '../styles/profile.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function Profile(props) {
   const [user, setUser] = useState({ friends: [] });
@@ -191,12 +192,21 @@ export default function Profile(props) {
   };
 
   return (
-    <div className="bg-emerald-100 min-h-screen py-6 px-4">
+    <div
+      className="min-h-screen py-6 px-4"
+      style={{ backgroundColor: "white", margin: "-25px" }}
+    >
       {openDM ? (
         <ChatBox fromId={token.user._id} toId={user._id} />
       ) : (
-        <div className="relative overflow-hidden bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out">
-          <div className="container rounded bg-white mb-4 transition-transform transform hover:scale-105 duration-300 ease-in-out">
+        <div
+          className="relative overflow-hidden p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out"
+          style={{ backgroundColor: "white" }}
+        >
+          <div
+            className="container rounded mb-4"
+            style={{ backgroundColor: "white" }}
+          >
             <div className="row">
               <div className="col-md-7 border-right">
                 <div className="d-flex flex-column align-items-center text-center p-5 py-5">
@@ -232,12 +242,14 @@ export default function Profile(props) {
                       <p className="fs-5">{user?.email}</p>
                     </div>
                     <div className="col-md-12">
-                      <label className="labels fw-bold fs-5">Mobile Number</label>
+                      <label className="labels fw-bold fs-5">
+                        Mobile Number
+                      </label>
                       <p className="fs-5">{user?.contact}</p>
                     </div>
                   </div>
                   {token && token?.user?._id !== user?._id && (
-                    <div className="d-flex flex-row justify-content-around w-50 my-3 pt-3">
+                    <div className="d-flex flex-row justify-content-evenly w-75 my-3 pt-3">
                       {isFriend ? (
                         <>
                           <button
@@ -245,6 +257,7 @@ export default function Profile(props) {
                             style={{ opacity: 0.7 }}
                             onClick={() => setShowConfirmModal(true)}
                           >
+                            <FontAwesomeIcon icon={faCheck} className="me-2" />
                             Friends
                           </button>
                           <button
@@ -293,25 +306,26 @@ export default function Profile(props) {
         </div>
       )}
 
-      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} className="transition-opacity duration-300 ease-in-out">
+      <Modal
+        show={showConfirmModal}
+        onHide={() => setShowConfirmModal(false)}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Confirm Unfriend</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to unfriend {user.name}?</Modal.Body>
+        <Modal.Body>
+          <p>Are you sure you want to remove {user.name} from your friends?</p>
+        </Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
             onClick={() => setShowConfirmModal(false)}
-            className="transition-colors duration-300 ease-in-out hover:bg-gray-300"
           >
             Cancel
           </Button>
-          <Button
-            variant="danger"
-            onClick={handleConfirmUnfriend}
-            className="transition-colors duration-300 ease-in-out hover:bg-red-600"
-          >
-            Unfriend
+          <Button variant="primary" onClick={handleConfirmUnfriend}>
+            Confirm
           </Button>
         </Modal.Footer>
       </Modal>
