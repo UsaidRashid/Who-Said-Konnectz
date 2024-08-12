@@ -51,11 +51,11 @@ export default function Friends() {
   }, []);
 
   return (
-    <div className="container mx-auto my-48  p-6 bg-emerald-100 rounded-lg shadow-lg">
+    <div className="mx-32 my-32  ">
       {user ? (
         <UserProfile user={user} />
       ) : (
-        <>
+        <div className="p-6 bg-emerald-100 min-h-screen">
           <h1 className="text-3xl font-bold text-center text-emerald-800 mb-6">
             All Friends
           </h1>
@@ -88,7 +88,7 @@ export default function Friends() {
               <p className="text-gray-500 text-center">No users found.</p>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

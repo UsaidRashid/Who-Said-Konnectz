@@ -108,12 +108,12 @@ export default function FriendRequests() {
   };
 
   return (
-    <div className="container mx-auto my-48  p-6 bg-emerald-100 rounded-lg shadow-lg">
+    <div className="mx-32 my-32">
       <>
         <h1 className="text-3xl font-bold text-center text-emerald-800 mb-6">
           All Friend Requests
         </h1>
-        <div className="flex flex-col space-y-6">
+        <div className="flex flex-col space-y-6 p-6 bg-emerald-100 min-h-screen">
           {users && users.length > 0 ? (
             users.map((user) => (
               <div

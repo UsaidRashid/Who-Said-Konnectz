@@ -51,11 +51,11 @@ export default function AllDms() {
   }, []);
 
   return (
-    <>
+    <div className='my-32 mx-32'>
       {user ? (
         <ChatBox fromId={token.user._id} toId={user._id} />
       ) : (
-        <div className="p-6 bg-emerald-100 min-h-screen my-48">
+        <div className="p-6 bg-emerald-100 min-h-screen">
           <h1 className="text-2xl font-bold text-emerald-700 mb-4">
             All Chats
           </h1>
@@ -82,6 +82,6 @@ export default function AllDms() {
           </ul>
         </div>
       )}
-    </>
+    </div>
   );
 }

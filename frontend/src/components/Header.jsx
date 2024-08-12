@@ -51,8 +51,8 @@ export default function Header() {
   }
 
   return (
-    <div className="navbar-container fixed w-100 z-20">
-      <nav className="navbar emerald-gradient shadow-lg">
+    <div className="navbar-container">
+      <nav className="navbar emerald-gradient shadow-lg fixed w-100 top-0 left-0 z-20">
         <div className="container mx-auto flex justify-between items-center py-4 w-100">
           <div className="flex items-center flex-column">
             <Link to="/" className="hover-effect">

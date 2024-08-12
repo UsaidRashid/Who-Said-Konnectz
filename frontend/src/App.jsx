@@ -21,8 +21,9 @@ const AppContent = () => {
     location.pathname !== "/login" && location.pathname !== "/signup";
   return (
     <>
-      {showNF && <Header />}
-      <Routes>
+    {showNF && <Header />}
+    <div>
+    <Routes>
         <Route path="/" element={<Navigation />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
@@ -33,6 +34,8 @@ const AppContent = () => {
         <Route path="/friend-requests" element={<FriendRequests />} />
         <Route path="/chats" element={<AllDms />} />
       </Routes>
+    </div>
+      
     </>
   );
 };

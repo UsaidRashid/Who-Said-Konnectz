@@ -3,6 +3,21 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  background: linear-gradient(135deg, #1d976c, #93f9b9);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  padding-top: 80px;
 }
 
 .emerald-gradient {
@@ -27,7 +42,7 @@
 }
 
 .hover-effect:after {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   transform: scaleX(0);
@@ -57,7 +72,6 @@
   transform: scale(1.1);
 }
 
-/* Custom Dropdown Styles */
 .dropdown-menu {
   background: #fff;
   border-radius: 0.5rem;
