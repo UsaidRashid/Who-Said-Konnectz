@@ -1,39 +1,15 @@
-import * as React from "react";
-import { useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Who-Said Private Limited
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const defaultTheme = createTheme();
+import {
+  Container,
+  Form,
+  Button,
+  Row,
+  Col,
+  FloatingLabel,
+} from "react-bootstrap";
+import "../styles/login.css"; 
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
@@ -61,7 +37,6 @@ export default function SignIn() {
       }
     } catch (error) {
       console.error("Error in Logging in:", error);
-      console.log(error.response?.data?.message || "An error occurred");
       if (error.response) {
         alert(
           "Error from server: " +
@@ -78,81 +53,59 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link to="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+    <div className="login-container">
+      <Container className="login-form-container w-50">
+        <h1 className="text-center mb-4 fs-3 bolder">Welcome Back!</h1>
+        <Form onSubmit={handleSubmit} className="mx-5">
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="username"
+                label="Username"
+                className="text-dark"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="password"
+                label="Password"
+                className="text-dark"
+              >
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Button type="submit" variant="primary" className="w-50 mb-3">
+            Sign In
+          </Button>
+          <Row className="mb-3">
+            <Col>
+              <p className="text-center text-black">
+                <Link to="/signup">Don't have an account? Sign Up</Link>
+              </p>
+            </Col>
+          </Row>
+        </Form>
       </Container>
-    </ThemeProvider>
+      <footer className="login-footer">
+        <p>Copyright © Who-Said Private Limited {new Date().getFullYear()}</p>
+      </footer>
+    </div>
   );
 }

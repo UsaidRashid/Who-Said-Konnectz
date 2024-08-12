@@ -1,38 +1,15 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Input from "@mui/material/Input";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Who-Said Private Limited
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const defaultTheme = createTheme();
+import {
+  Container,
+  Form,
+  Button,
+  FloatingLabel,
+  Row,
+  Col,
+} from "react-bootstrap";
+import "../styles/signup.css";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -62,7 +39,6 @@ export default function SignUp() {
     formData.append("profilePic", profilePic);
 
     try {
-      console.log(formData);
       const response = await axios.post(
         "http://localhost:3002/signup",
         formData,
@@ -78,7 +54,6 @@ export default function SignUp() {
         const token = response.data.token;
         localStorage.setItem("token", token);
         navigate("/");
-        return response.data;
       } else {
         alert("Unexpected status code: " + response.status);
       }
@@ -100,120 +75,124 @@ export default function SignUp() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="username"
-                  name="username"
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  autoFocus
+    <div className="signup-container">
+      <Container className="signup-form-container w-50">
+        <h1 className="text-center mb-4 fs-3 bolder">
+          Join our Who-Said Family!
+        </h1>
+        <Form onSubmit={handleSubmit} className="mx-5">
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="username"
+                label="Username"
+                className="text-black"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
                   required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="email"
+                label="Email Address"
+                className="text-black"
+              >
+                <Form.Control
+                  type="email"
+                  placeholder="Email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
                   required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  name="name"
-                  autoComplete="name"
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="name"
+                label="Name"
+                className="text-black"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
                   required
-                  fullWidth
-                  id="contact"
-                  label="Contact Number"
-                  name="contact"
-                  autoComplete="contact"
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="contact"
+                label="Contact Number"
+                className="text-black"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Contact Number"
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
                   required
-                  fullWidth
-                  name="password"
-                  label="Password"
+                />
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <FloatingLabel
+                controlId="password"
+                label="Password"
+                className="text-black"
+              >
+                <Form.Control
                   type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <Input
-                  accept="image/*"
+              </FloatingLabel>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="profilePic">
+                <Form.Label className="text-black w-100 text-start ms-3">
+                  Upload Your Profile Picture
+                </Form.Label>
+                <Form.Control
                   type="file"
+                  accept="image/*"
                   onChange={handleFileChange}
-                  sx={{ mt: 2 }}
+                  className="form-control-file"
                 />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/login" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Button type="submit" variant="primary" className="w-50 mb-3">
+            Sign Up
+          </Button>
+          <p className="text-center text-black">
+            Already have an account? <Link to="/login">Sign in</Link>
+          </p>
+        </Form>
       </Container>
-    </ThemeProvider>
+      <footer className="signup-footer">
+        <p>Copyright © Who-Said Private Limited {new Date().getFullYear()}</p>
+      </footer>
+    </div>
   );
 }
