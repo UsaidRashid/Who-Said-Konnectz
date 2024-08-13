@@ -16,11 +16,13 @@ export default function Header() {
     let decodedToken = "";
     if (token) {
       decodedToken = jwtDecode(token);
+      setToken(decodedToken);
+      console.log(decodedToken);
     }
     setProfilePic(decodedToken?.user?.profilePic);
     if (token !== null) setIsLoggedIn(true);
     else setIsLoggedIn(false);
-  });
+  },[]);
 
   async function logout() {
     try {
@@ -65,7 +67,7 @@ export default function Header() {
           <div className="flex items-center space-x-6 mx-5">
             <div className="dropdown">
               <img
-                className="rounded-full cursor-pointer"
+                className="rounded-full cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-110 hover:shadow-lg"
                 src={profilePic ? profilePic : profile}
                 alt="Profile"
                 style={{ height: "50px", width: "50px" }}
@@ -73,13 +75,14 @@ export default function Header() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               />
+
               <ul
                 className="dropdown-menu dropdown-menu-end"
                 aria-labelledby="dropdownMenuButton"
               >
                 <li>
                   <Link to="/profile" className="dropdown-item">
-                    <i className="fas fa-user-circle me-2"></i> Your Profile
+                    <i className="fas fa-user-circle me-2"></i> Your Profile 
                   </Link>
                 </li>
                 <li>
@@ -89,12 +92,12 @@ export default function Header() {
                 </li>
                 <li>
                   <Link to="/friends" className="dropdown-item">
-                    <i className="fas fa-user-friends me-2"></i> Your Friends
+                    <i className="fas fa-user-friends me-2"></i> Your Friends : {token && token?.user?.friends?.length}
                   </Link>
                 </li>
                 <li>
                   <Link to="/friend-requests" className="dropdown-item">
-                    <i className="fas fa-user-plus me-2"></i> Friend Requests
+                    <i className="fas fa-user-plus me-2"></i> Friend Requests : {token && token?.user?.requestsRecieved?.length}
                   </Link>
                 </li>
                 {isLoggedin ? (

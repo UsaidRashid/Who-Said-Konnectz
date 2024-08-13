@@ -159,7 +159,7 @@ export default function Home() {
                 borderRadius: "8px",
                 overflow: "hidden",
                 position: "relative",
-                boxShadow: "0 20px 50px rgba(76, 175, 80, 0.4)"
+                boxShadow: "0 20px 50px rgba(76, 175, 80, 0.4)",
               }}
             >
               <div className="card-body p-4">
