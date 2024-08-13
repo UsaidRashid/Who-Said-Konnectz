@@ -76,3 +76,39 @@ module.exports.fetchPosts = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+module.exports.fetchIndividualPosts = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const posts = await Post.find({})
+      .populate("author")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "author",
+        },
+      });
+
+    const individualPosts = posts.filter(
+      (post) => post.author._id.toString() === _id
+    );
+
+    return res
+      .status(200)
+      .json({ message: "Posts fetched successfully", posts: individualPosts });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports.deletePost = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    await Post.deleteOne({ _id });
+    return res.status(200).json({ message: "Post Deleted Successfully" });
+  } catch (error) {
+    console.error("Error Deleting Post", error);
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};

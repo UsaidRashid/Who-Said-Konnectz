@@ -16,6 +16,7 @@ import Friends from "./components/Friends";
 import FriendRequests from "./components/FriendRequests";
 import Users from "./components/Users";
 import ProtectedRoute from "./components/protectedRoute";
+import ViewPosts from './components/ViewPosts';
 
 const AppContent = () => {
   const location = useLocation();
@@ -82,6 +83,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <Users />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/view-posts"
+            element={
+              <ProtectedRoute>
+                <ViewPosts />
               </ProtectedRoute>
             }
           />

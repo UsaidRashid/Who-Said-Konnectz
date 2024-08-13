@@ -87,6 +87,11 @@ export default function Header() {
                       </Link>
                     </li>
                     <li>
+                      <Link to="/view-posts" className="dropdown-item">
+                        <i className="fas fa-user-circle me-2"></i> Your Posts
+                      </Link>
+                    </li>
+                    <li>
                       <Link to="/chats" className="dropdown-item">
                         <i className="fas fa-comments me-2"></i> All Chats
                       </Link>
