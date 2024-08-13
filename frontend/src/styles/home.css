@@ -1,0 +1,45 @@
+/* Slide-up animation for the modal */
+@keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .slide-up-modal .modal-dialog {
+    animation: slide-up 0.5s ease-out;
+  }
+  
+  /* Additional styling for the modal header */
+  .modal-header {
+    border-bottom: 1px solid #4CAF50;
+  }
+  
+  /* Styling for the profile picture and name, similar to the post */
+  .rounded-circle {
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+  }
+  
+  .card-title {
+    margin-bottom: 0;
+  }
+  
+  .card-text {
+    margin-top: 0.5rem;
+  }
+  
+  /* Transparent border that darkens on hover for like buttons */
+  .btn-transparent {
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  
+  .btn-transparent:hover {
+    border-color: #4CAF50;
+  }
+  

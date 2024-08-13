@@ -5,6 +5,7 @@ import axios from "axios";
 import { setPosts } from "../store/Features/postSlice";
 import { toggleLike, toggleLikeComment } from "../store/Features/postSlice";
 import { jwtDecode } from "jwt-decode";
+import "../styles/home.css";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ export default function Home() {
               _id: post._id,
               content: post.content,
               author: post.author.name,
-              postPic : post.postPic,
+              username: post.author.username,
+              postPic: post.postPic,
               profilePic: post.author.profilePic,
               likes: post.likes,
               comments: post.comments.map((comment) => ({
@@ -151,59 +153,97 @@ export default function Home() {
           {posts.map((post) => (
             <div
               key={post._id}
-              className="card border-emerald-600 shadow-lg mb-4"
+              className="card border-emerald-600 border-3 mb-4"
               style={{
                 border: "1px solid #4CAF50",
                 borderRadius: "8px",
                 overflow: "hidden",
+                position: "relative",
+                boxShadow: "0 20px 50px rgba(76, 175, 80, 0.4)"
               }}
             >
-              <div className="card-body">
-                <div className="d-flex flex-row justify-content-evenly w-50">
+              <div className="card-body p-4">
+                <div className="d-flex align-items-center mb-3">
                   <img
                     src={post.profilePic}
                     alt=""
-                    height="40px"
-                    width="40px"
-                    className="rounded-circle"
+                    height="50px"
+                    width="50px"
+                    className="rounded-circle border border-emerald-600"
+                    style={{ objectFit: "cover", aspectRatio: "1 / 1" }}
                   />
-                  <h5 className="card-title text-emerald-600 mt-2 ms-3 w-100">
-                    {post.author}
-                  </h5>
+                  <div className="ms-3">
+                    <h5 className="card-title text-emerald-600 mb-0">
+                      {post.author}
+                    </h5>
+                    <small className="text-muted">@{post.username}</small>
+                  </div>
                 </div>
-               
-                <p className="card-text my-4">{post.content}</p>
-                {post.postPic && 
-                  <img src={post.postPic} alt="" height='100%' width='100%' />
-                }
-                <div className="mb-3 text-center">
-                  <span className="badge bg-light text-dark me-2">
+
+                <p className="card-text my-4 font-monospace text-center">
+                  {post.content}
+                </p>
+
+                {post.postPic && (
+                  <img
+                    src={post.postPic}
+                    alt=""
+                    className="img-fluid border border-emerald-600"
+                    style={{
+                      borderRadius: "8px",
+                      padding: "4px",
+                      boxShadow: "0 0 5px #4CAF50",
+                      height: "100%",
+                      width: "100%",
+                    }}
+                  />
+                )}
+                <div className="my-3 text-center">
+                  <span className="badge bg-primary text-dark me-2">
                     {post.likes.length} Likes
                   </span>
-                  <span className="badge bg-light text-dark">
+                  <span className="badge bg-primary text-dark">
                     {post.comments.length} Comments
                   </span>
                 </div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between align-items-center position-absolute bottom-0 start-0 w-100 bg-white">
                   <button
-                    className={`btn btn-${post.isLiked ? "danger" : "success"}`}
+                    className={`btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50
+                      // {post.isLiked ? "text-danger" : "text-success"} 
+                    `}
                     onClick={() => handleLike(post)}
+                    style={{
+                      borderWidth: "1px",
+                      borderStyle: "solid",
+                      transition: "border-color 0.3s ease",
+                    }}
                   >
+                    {!post.isLiked ? (
+                      <i className="fas fa-thumbs-up me-2"></i>
+                    ) : (
+                      <i class="fa-solid fa-thumbs-down"></i>
+                    )}
+
                     {post.isLiked ? "Unlike" : "Like"}
                   </button>
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50"
                     data-bs-toggle="modal"
                     data-bs-target={`#commentsModal-${post._id}`}
+                    style={{
+                      borderWidth: "1px",
+                      borderStyle: "solid",
+                      transition: "border-color 0.3s ease",
+                    }}
                   >
-                    Comments
+                    <i className="fas fa-comment me-2"></i>Comments
                   </button>
                 </div>
               </div>
 
               <div
-                className="modal fade"
+                className="modal fade slide-up-modal"
                 id={`commentsModal-${post._id}`}
                 tabIndex="-1"
                 aria-labelledby={`commentsModalLabel-${post._id}`}
@@ -238,40 +278,54 @@ export default function Home() {
                             }}
                           >
                             <div className="card-body">
-                              <div className="d-flex flex-row justify-content-evenly w-25">
+                              <div className="d-flex align-items-center mb-3">
                                 <img
                                   src={comment.author.profilePic}
                                   alt=""
-                                  height="40px"
-                                  width="40px"
-                                  className="rounded-circle"
+                                  height="50px"
+                                  width="50px"
+                                  className="rounded-circle border border-emerald-600"
+                                  style={{
+                                    objectFit: "cover",
+                                    aspectRatio: "1 / 1",
+                                  }}
                                 />
-                                <h5 className="card-title text-emerald-600 mt-2">
-                                  {comment.author.name}
-                                </h5>
+                                <div className="ms-3">
+                                  <h5 className="card-title text-emerald-600 mb-0">
+                                    {comment.author.name}
+                                  </h5>
+                                  <small className="text-muted">
+                                    @{comment.author.username}
+                                  </small>
+                                </div>
                               </div>
-                              <p className="card-text mb-4">
+                              <p className="card-text mb-4 font-monospace text-center">
                                 {comment.content}
                               </p>
-                              <div className="mb-3 text-center">
-                                <span className="badge bg-light text-dark me-2">
-                                  {comment.likes.length} Likes
-                                </span>
-                              </div>
-                              <div className="d-flex justify-content-between">
+                              <div className="d-flex justify-content-between align-items-center">
                                 <button
-                                  className={`btn btn-${
-                                    comment.isCommentLiked
-                                      ? "danger"
-                                      : "success"
-                                  } btn-sm`}
+                                  className={`btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50
+                                   // comment.isCommentLiked ? "text-danger" : ""
+                                  `}
+                                  style={{
+                                    borderWidth: "1px",
+                                    borderStyle: "solid",
+                                    transition: "border-color 0.3s ease",
+                                  }}
                                   onClick={() =>
                                     handleCommentLike(comment, post._id)
                                   }
                                 >
+                                  {!comment.isCommentLiked ? (
+                                    <i className="fas fa-thumbs-up me-2"></i>
+                                  ) : (
+                                    <i class="fa-solid fa-thumbs-down"></i>
+                                  )}
                                   {comment.isCommentLiked ? "Unlike" : "Like"}
                                 </button>
-                                
+                                <span className="badge bg-primary text-dark me-5">
+                                  {comment.likes.length} Likes
+                                </span>
                               </div>
                             </div>
                           </div>
