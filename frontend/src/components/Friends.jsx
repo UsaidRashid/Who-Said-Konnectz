@@ -72,7 +72,7 @@ export default function Friends() {
                       src={user.profilePic}
                       height="40px"
                       width="40px"
-                      className="rounded-circle"
+                      className="h-16 w-16 rounded-full border-2 border-emerald-500 object-cover"
                     />
                     <div className="mx-5">
                       <h2 className="text-xl font-semibold text-emerald-700">

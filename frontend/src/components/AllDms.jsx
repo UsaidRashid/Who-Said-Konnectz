@@ -71,7 +71,7 @@ export default function AllDms() {
                     src={user.profilePic}
                     height="40px"
                     width="40px"
-                    className="rounded-circle mx-3"
+                    className="h-16 w-16 rounded-full border-2 border-emerald-500 object-cover"
                   />
                   <span className="text-emerald-900 font-semibold mt-1 ms-1">
                     {user.name}

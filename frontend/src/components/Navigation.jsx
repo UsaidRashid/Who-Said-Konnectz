@@ -16,7 +16,8 @@ import WhoSaid from "./WhoSaid";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import '../styles/navigation.css';
+import "../styles/navigation.css";
+import ProtectedRoute from "./protectedRoute";
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
@@ -66,11 +67,17 @@ export default function Navigation() {
       case 0:
         return <Home />;
       case 1:
-        return <WhoSaid />;
+        return (
+          <ProtectedRoute>
+            <NewPost postCreated={postCreated} />
+          </ProtectedRoute>
+        );
       case 2:
-        return <NewPost postCreated={postCreated} />;
-      case 3:
-        return <Users />;
+        return (
+          <ProtectedRoute>
+            <WhoSaid />
+          </ProtectedRoute>
+        );
       default:
         return <Home />;
     }
@@ -98,18 +105,13 @@ export default function Navigation() {
           />
           <BottomNavigationAction
             className="text-white"
-            label="Who-Said"
-            icon={<FormatQuoteIcon />}
-          />
-          <BottomNavigationAction
-            className="text-white"
             label="New Post"
             icon={<AddIcon />}
           />
           <BottomNavigationAction
             className="text-white"
-            label="Users"
-            icon={<PeopleOutlineIcon />}
+            label="Who-Said"
+            icon={<FormatQuoteIcon />}
           />
         </BottomNavigation>
       </Box>

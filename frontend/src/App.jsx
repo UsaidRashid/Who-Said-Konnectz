@@ -14,6 +14,8 @@ import ProfileUpdate from "./components/ProfileUpdate";
 import AllDms from "./components/AllDms";
 import Friends from "./components/Friends";
 import FriendRequests from "./components/FriendRequests";
+import Users from "./components/Users";
+import ProtectedRoute from "./components/protectedRoute";
 
 const AppContent = () => {
   const location = useLocation();
@@ -21,21 +23,70 @@ const AppContent = () => {
     location.pathname !== "/login" && location.pathname !== "/signup";
   return (
     <>
-    {showNF && <Header />}
-    <div>
-    <Routes>
-        <Route path="/" element={<Navigation />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/profile-update" element={<ProfileUpdate />} />
-        <Route path="/friends" element={<Friends />} />
-        <Route path="/friend-requests" element={<FriendRequests />} />
-        <Route path="/chats" element={<AllDms />} />
-      </Routes>
-    </div>
-      
+      {showNF && <Header />}
+      <div>
+        <Routes>
+          <Route path="/" element={<Navigation />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-profile"
+            element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile-update"
+            element={
+              <ProtectedRoute>
+                <ProfileUpdate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute>
+                <Friends />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friend-requests"
+            element={
+              <ProtectedRoute>
+                <FriendRequests />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chats"
+            element={
+              <ProtectedRoute>
+                <AllDms />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
     </>
   );
 };

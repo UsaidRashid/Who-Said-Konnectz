@@ -128,6 +128,11 @@ export default function Home() {
   const handleAddComment = async (e, postId) => {
     e.preventDefault();
     try {
+      if (!userId) {
+        alert("You must be logged in");
+        navigate("/login");
+        return;
+      }
       const content = e.target.elements[`commentText-${postId}`].value;
       console.log(content);
       const response = await axios.post("http://localhost:3002/comments/new", {

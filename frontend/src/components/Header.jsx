@@ -9,8 +9,8 @@ export default function Header() {
   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState("");
   const [isLoggedin, setIsLoggedIn] = useState(false);
-  const [requestsRecieved,setRequestsRecieved] = useState(0);
-  const [friends,setFriends] = useState(0);
+  const [requestsRecieved, setRequestsRecieved] = useState(0);
+  const [friends, setFriends] = useState(0);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -19,10 +19,9 @@ export default function Header() {
       setFriends(decodedToken?.user?.friends?.length);
       setRequestsRecieved(decodedToken?.user?.requestsRecieved?.length);
       setProfilePic(decodedToken?.user?.profilePic);
-      setIsLoggedIn(true)
-    }
-    else setIsLoggedIn(false);
-  },[]);
+      setIsLoggedIn(true);
+    } else setIsLoggedIn(false);
+  }, []);
 
   async function logout() {
     try {
@@ -80,26 +79,37 @@ export default function Header() {
                 className="dropdown-menu dropdown-menu-end"
                 aria-labelledby="dropdownMenuButton"
               >
-                <li>
-                  <Link to="/profile" className="dropdown-item">
-                    <i className="fas fa-user-circle me-2"></i> Your Profile 
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/chats" className="dropdown-item">
-                    <i className="fas fa-comments me-2"></i> All Chats
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/friends" className="dropdown-item">
-                    <i className="fas fa-user-friends me-2"></i> Your Friends : {friends}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/friend-requests" className="dropdown-item">
-                    <i className="fas fa-user-plus me-2"></i> Friend Requests : {requestsRecieved}
-                  </Link>
-                </li>
+                {isLoggedin && (
+                  <>
+                    <li>
+                      <Link to="/profile" className="dropdown-item">
+                        <i className="fas fa-user-circle me-2"></i> Your Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/chats" className="dropdown-item">
+                        <i className="fas fa-comments me-2"></i> All Chats
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/friends" className="dropdown-item">
+                        <i className="fas fa-user-friends me-2"></i> Your
+                        Friends : {friends}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/friend-requests" className="dropdown-item">
+                        <i className="fas fa-user-plus me-2"></i> Friend
+                        Requests : {requestsRecieved}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/users" className="dropdown-item">
+                        <i className="fas fa-user-plus me-2"></i> All Users
+                      </Link>
+                    </li>
+                  </>
+                )}
                 {isLoggedin ? (
                   <li>
                     <button
