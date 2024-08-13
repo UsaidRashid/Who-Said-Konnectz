@@ -4,7 +4,7 @@ import profile from "../Images/profile.png";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import "../styles/navbar.css";
-import logo from '../Images/logo.png';
+import logo from "../Images/logo.png";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -56,7 +56,12 @@ export default function Header() {
     <div className="navbar-container">
       <nav className="navbar emerald-gradient shadow-lg fixed w-100 top-0 left-0 z-20">
         <div className="container mx-auto flex justify-between items-center py-4 w-100">
-            <img src={logo} height='60px' width='60px' className="rounded-circle position-absolute"/>
+          <img
+            src={logo}
+            height="60px"
+            width="60px"
+            className="rounded-circle position-absolute"
+          />
           <div className="flex items-center flex-column">
             <Link to="/" className="hover-effect">
               <h1 className="text-3xl font-bold text-white tracking-wider">
