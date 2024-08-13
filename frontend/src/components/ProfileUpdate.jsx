@@ -44,6 +44,7 @@ export default function ProfileUpdate() {
     try {
       const token = localStorage.getItem("token");
       formData.token = token;
+      console.log(formData);
       const response = await axios.post(
         "http://localhost:3002/update",
         formData,

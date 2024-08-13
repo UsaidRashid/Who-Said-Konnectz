@@ -62,7 +62,7 @@ export default function NewPost({ postCreated }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-emerald-50 my-32">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full transform transition-all hover:scale-105 duration-300 ease-in-out">
-        <h2 className="text-2xl font-bold mb-6 text-emerald-900 animate-pulse">
+        <h2 className="text-2xl font-bold mb-6 text-emerald-900 animate-pulse text-center">
           Cook Something Great...
         </h2>
         <textarea

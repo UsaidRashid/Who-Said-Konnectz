@@ -8,19 +8,19 @@ import "../styles/navbar.css";
 export default function Header() {
   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState("");
-  const [token, setToken] = useState("");
   const [isLoggedin, setIsLoggedIn] = useState(false);
+  const [requestsRecieved,setRequestsRecieved] = useState(0);
+  const [friends,setFriends] = useState(0);
 
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
-    let decodedToken = "";
-    if (token) {
-      decodedToken = jwtDecode(token);
-      setToken(decodedToken);
-      console.log(decodedToken);
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const decodedToken = jwtDecode(storedToken);
+      setFriends(decodedToken?.user?.friends?.length);
+      setRequestsRecieved(decodedToken?.user?.requestsRecieved?.length);
+      setProfilePic(decodedToken?.user?.profilePic);
+      setIsLoggedIn(true)
     }
-    setProfilePic(decodedToken?.user?.profilePic);
-    if (token !== null) setIsLoggedIn(true);
     else setIsLoggedIn(false);
   },[]);
 
@@ -92,12 +92,12 @@ export default function Header() {
                 </li>
                 <li>
                   <Link to="/friends" className="dropdown-item">
-                    <i className="fas fa-user-friends me-2"></i> Your Friends : {token && token?.user?.friends?.length}
+                    <i className="fas fa-user-friends me-2"></i> Your Friends : {friends}
                   </Link>
                 </li>
                 <li>
                   <Link to="/friend-requests" className="dropdown-item">
-                    <i className="fas fa-user-plus me-2"></i> Friend Requests : {token && token?.user?.requestsRecieved?.length}
+                    <i className="fas fa-user-plus me-2"></i> Friend Requests : {requestsRecieved}
                   </Link>
                 </li>
                 {isLoggedin ? (
