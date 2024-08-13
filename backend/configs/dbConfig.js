@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const mongoUrl = "mongodb+srv://usaid786:kjkszpj786@cluster0.psy0ody.mongodb.net/Who-Said-Konnectz?retryWrites=true&w=majority&appName=Cluster0";
+const mongoUrl = process.env.MONGO_URL;
 
 main()
   .then(() => {

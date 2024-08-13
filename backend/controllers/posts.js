@@ -8,7 +8,7 @@ module.exports.createPost = async (req, res) => {
 
   const postPic = req.file ? req.file.path : null;
 
-  const decodedToken = jwt.verify(token, "secretkey");
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
   const authorDB = await User.find({ _id: decodedToken.user._id });
 

@@ -47,9 +47,13 @@ module.exports.signUp = async (req, res) => {
 
         return res.status(400).json({ message: "Error saving the user" });
       } else {
-        const token = jwt.sign({ user: registeredUser }, "secretkey", {
-          algorithm: "HS256",
-        });
+        const token = jwt.sign(
+          { user: registeredUser },
+          process.env.JWT_SECRET,
+          {
+            algorithm: "HS256",
+          }
+        );
 
         return res.status(200).json({
           message: "User created successfully",
@@ -72,7 +76,9 @@ module.exports.login = async (req, res) => {
       .populate("requestsSent");
 
     const payload = { user: user };
-    const token = jwt.sign(payload, "secretkey", { expiresIn: "1h" });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     return res.status(200).json({ message: "Login successful!", token });
   } catch (error) {
@@ -108,7 +114,7 @@ module.exports.updateDetails = async (req, res) => {
         .status(400)
         .json({ message: "Something went wrong! Are you logged in?" });
 
-    const decodedToken = jwt.verify(token, "secretkey");
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const username = decodedToken.user.username;
 
@@ -135,7 +141,7 @@ module.exports.updateDetails = async (req, res) => {
       .populate("requestsSent")
       .populate("requestsRecieved");
 
-    const newToken = jwt.sign({ user: updatedUser }, "secretkey", {
+    const newToken = jwt.sign({ user: updatedUser }, process.env.JWT_SECRET, {
       algorithm: "HS256",
     });
 
@@ -180,7 +186,7 @@ module.exports.sendFriendRequest = async (req, res) => {
     user2.requestsSent.push(user1);
     await user1.save();
     await user2.save();
-    const token = jwt.sign({ user: user2 }, "secretkey", {
+    const token = jwt.sign({ user: user2 }, process.env.JWT_SECRET, {
       algorithm: "HS256",
     });
     return res
@@ -220,7 +226,7 @@ module.exports.acceptFriendRequest = async (req, res) => {
     user2.friends.push(user1);
     await user1.save();
     await user2.save();
-    const token = jwt.sign({ user: user1 }, "secretkey", {
+    const token = jwt.sign({ user: user1 }, process.env.JWT_SECRET, {
       algorithm: "HS256",
     });
     return res
@@ -243,7 +249,7 @@ module.exports.rejectFriendRequest = async (req, res) => {
     user2.requestsSent.pull(toId);
     await user1.save();
     await user2.save();
-    const token = jwt.sign({ user: user1 }, "secretkey", {
+    const token = jwt.sign({ user: user1 }, process.env.JWT_SECRET, {
       algorithm: "HS256",
     });
     return res
@@ -268,7 +274,7 @@ module.exports.removeFriend = async (req, res) => {
     );
     await user1.save();
     await user2.save();
-    const token = jwt.sign({ user: user2 }, "secretkey", {
+    const token = jwt.sign({ user: user2 }, process.env.JWT_SECRET, {
       algorithm: "HS256",
     });
     return res
@@ -302,7 +308,7 @@ module.exports.fetchToken = async (req, res) => {
       .populate("requestsRecieved")
       .populate("requestsSent")
       .populate("friends");
-    const token = jwt.sign({ user: user }, "secretkey", {
+    const token = jwt.sign({ user: user }, process.env.JWT_SECRET, {
       algorithm: "HS256",
     });
     return res
