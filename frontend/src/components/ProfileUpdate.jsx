@@ -128,7 +128,7 @@ export default function ProfileUpdate() {
                 id="file-upload"
                 type="file"
                 className="hidden"
-                name = 'profilePic'
+                name="profilePic"
                 onChange={handleChange}
               />
             </label>

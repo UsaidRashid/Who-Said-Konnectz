@@ -42,7 +42,6 @@ const ChatBox = ({ fromId, toId }) => {
     socketRef.current.emit("register_user", fromId);
 
     socketRef.current.on("receive_dm", ({ fromId: senderId, message }) => {
-      console.log("Received message:", message);
       if (senderId === toId || senderId === fromId) {
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -60,7 +59,6 @@ const ChatBox = ({ fromId, toId }) => {
   const sendMessage = () => {
     if (message) {
       socketRef.current.emit("send_dm", { fromId, toId, message });
-      console.log("Sent message:", message);
       setMessage("");
     }
   };

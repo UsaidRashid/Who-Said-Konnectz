@@ -33,7 +33,6 @@ export default function Home() {
           { _id: userId }
         );
 
-        console.log("response", response.data.posts);
         dispatch(
           setPosts(
             response.data.posts.map((post) => ({
@@ -54,7 +53,20 @@ export default function Home() {
           )
         );
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error in fetching individual posts:", error);
+        console.log(error.response?.data?.message || "An error occurred");
+        if (error.response) {
+          alert(
+            "Error from server: " +
+              error.response.status +
+              " - " +
+              error.response.data.message
+          );
+        } else if (error.request) {
+          alert("No response from the server");
+        } else {
+          alert("Error setting up the request: " + error.message);
+        }
       }
     };
 
@@ -85,14 +97,26 @@ export default function Home() {
         alert("You must be Logged in!");
         navigate("/login");
       }
-      console.log(commentId);
       if (response.status === 200) {
         dispatch(toggleLikeComment({ commentId, userId, postId }));
       } else {
         console.error("Error liking Comment:", response.data.message);
       }
     } catch (error) {
-      console.log("Error occured while liking", error);
+      console.error("Error in toggling like:", error);
+      console.log(error.response?.data?.message || "An error occurred");
+      if (error.response) {
+        alert(
+          "Error from server: " +
+            error.response.status +
+            " - " +
+            error.response.data.message
+        );
+      } else if (error.request) {
+        alert("No response from the server");
+      } else {
+        alert("Error setting up the request: " + error.message);
+      }
     }
   };
 
@@ -124,7 +148,20 @@ export default function Home() {
         console.error("Error liking post:", response.data.message);
       }
     } catch (error) {
-      console.error("Error liking post:", error);
+      console.error("Error in Toggling like:", error);
+      console.log(error.response?.data?.message || "An error occurred");
+      if (error.response) {
+        alert(
+          "Error from server: " +
+            error.response.status +
+            " - " +
+            error.response.data.message
+        );
+      } else if (error.request) {
+        alert("No response from the server");
+      } else {
+        alert("Error setting up the request: " + error.message);
+      }
     }
   };
 
@@ -137,7 +174,6 @@ export default function Home() {
         return;
       }
       const content = e.target.elements[`commentText-${postId}`].value;
-      console.log(content);
       const response = await axios.post("http://localhost:3002/comments/new", {
         postId,
         author: userId,
@@ -151,13 +187,25 @@ export default function Home() {
         console.error("Error Commenting on post:", response.data.message);
       }
     } catch (error) {
-      console.error("Error commenting on post:", error);
+      console.error("Error in Adding Comment:", error);
+      console.log(error.response?.data?.message || "An error occurred");
+      if (error.response) {
+        alert(
+          "Error from server: " +
+            error.response.status +
+            " - " +
+            error.response.data.message
+        );
+      } else if (error.request) {
+        alert("No response from the server");
+      } else {
+        alert("Error setting up the request: " + error.message);
+      }
     }
   };
 
   const handleDeletePost = async (_id) => {
     try {
-      console.log(_id);
       const response = await axios.post(
         "http://localhost:3002/posts/delete-post",
         { _id }

@@ -38,7 +38,9 @@ export default function WhoSaid() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-emerald-50 py-12 px-6 my-32">
       <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-emerald-700 mb-6 text-center">Who Said - Some Untold Stories & Quotes</h2>
+        <h2 className="text-3xl font-bold text-emerald-700 mb-6 text-center">
+          Who Said - Some Untold Stories & Quotes
+        </h2>
 
         <div className="space-y-4">
           {sayings.length > 0 ? (
@@ -51,7 +53,9 @@ export default function WhoSaid() {
               </div>
             ))
           ) : (
-            <p className="text-emerald-600">No sayings yet. Be the first to post!</p>
+            <p className="text-emerald-600">
+              No sayings yet. Be the first to post!
+            </p>
           )}
         </div>
       </div>

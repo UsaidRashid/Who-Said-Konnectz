@@ -33,7 +33,7 @@ export default function Friends() {
           alert(response.data.message || "Some Error occured");
         }
       } catch (error) {
-        console.error("Error in Logging in:", error);
+        console.error("Error in fetching friends:", error);
         console.log(error.response?.data?.message || "An error occurred");
         if (error.response) {
           alert(

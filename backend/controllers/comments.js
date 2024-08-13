@@ -23,7 +23,6 @@ module.exports.createComment = async (req, res) => {
     post.comments.push(newComment);
 
     await post.save();
-    console.log(post);
     res
       .status(200)
       .json({ message: "Comment created successfully", comment: newComment });
@@ -46,12 +45,10 @@ module.exports.toggleLike = async (req, res) => {
     let unliked = await comment.toggleLike(userId);
     const likesCount = comment.likes.length;
 
-    res
-      .status(200)
-      .json({
-        message: unliked ? "Unliked Successfully" : "Liked Successfully",
-        likesCount,
-      });
+    res.status(200).json({
+      message: unliked ? "Unliked Successfully" : "Liked Successfully",
+      likesCount,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });

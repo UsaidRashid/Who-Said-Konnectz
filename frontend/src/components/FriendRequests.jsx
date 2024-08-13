@@ -26,7 +26,7 @@ export default function FriendRequests() {
           alert(response.data.message || "Some Error occured");
         }
       } catch (error) {
-        console.error("Error in Logging in:", error);
+        console.error("Error in fetching friend requests:", error);
         console.log(error.response?.data?.message || "An error occurred");
         if (error.response) {
           alert(
@@ -91,7 +91,7 @@ export default function FriendRequests() {
         alert(response.data.message || "Error Accepting Request");
       }
     } catch (error) {
-      console.error("Error Accepting Friend Request:", error);
+      console.error("Error Rejecting Friend Request:", error);
       if (error.response) {
         alert(
           "Error from server: " +

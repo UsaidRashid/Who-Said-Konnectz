@@ -2,14 +2,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3002;
-const path = require('path');
+const path = require("path");
 
 const { createServer } = require("node:http");
 const { Server } = require("socket.io");
 const server = createServer(app);
 
-require('./configs/dbConfig');
-require('./configs/multerConfig');
+require("./configs/dbConfig");
+require("./configs/multerConfig");
 const sessionConfig = require("./configs/sessionConfig");
 const passport = require("./configs/passportConfig");
 
@@ -18,7 +18,7 @@ const MessagesController = require("./controllers/messages");
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, './configs/uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "./configs/uploads")));
 app.use(sessionConfig);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,25 +33,19 @@ const io = new Server(server, {
 const userSocketMap = new Map();
 
 io.on("connection", (socket) => {
-  console.log("A user connected!", socket.id);
-
   socket.on("register_user", (userId) => {
     userSocketMap.set(userId, socket.id);
-    console.log(`User ${userId} registered with socket ID: ${socket.id}`);
   });
 
   socket.on("disconnect", () => {
     userSocketMap.forEach((value, key) => {
       if (value === socket.id) {
         userSocketMap.delete(key);
-        console.log(`User ${key} disconnected and removed from the map`);
       }
     });
   });
 
   socket.on("send_dm", async ({ fromId, toId, message }) => {
-    console.log(`Sending DM from ${fromId} to ${toId}: ${message}`);
-
     try {
       const result = await MessagesController.saveMessage(
         fromId,
@@ -74,7 +68,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-
 
 app.use((err, req, res, next) => {
   console.error(err);

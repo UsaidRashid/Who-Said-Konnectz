@@ -18,8 +18,20 @@ export default function Users() {
           alert(response.data.message || "Some Error occurred");
         }
       } catch (error) {
-        console.error("Error fetching users:", error);
-        alert(error.response?.data?.message || "An error occurred");
+        console.error("Error in Fetching Users:", error);
+        console.log(error.response?.data?.message || "An error occurred");
+        if (error.response) {
+          alert(
+            "Error from server: " +
+              error.response.status +
+              " - " +
+              error.response.data.message
+          );
+        } else if (error.request) {
+          alert("No response from the server");
+        } else {
+          alert("Error setting up the request: " + error.message);
+        }
       }
     };
 
@@ -27,7 +39,7 @@ export default function Users() {
   }, []);
 
   return (
-    <div className='my-32 mx-32'>
+    <div className="my-32 mx-32">
       {user ? (
         <UserProfile user={user} />
       ) : (

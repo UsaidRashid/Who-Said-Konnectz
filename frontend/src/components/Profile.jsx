@@ -2,7 +2,6 @@ import React from "react";
 import profile from "../Images/profile.png";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-// import "../styles/profile.css"; 
 
 export default function Profile() {
   const navigate = useNavigate();

@@ -13,12 +13,10 @@ module.exports.saveWhoSaid = async (req, res) => {
 
     await newWhoSaid.save();
 
-    return res
-      .status(200)
-      .json({
-        message: "Saying saved Successfully in Who-Said",
-        saying: newWhoSaid,
-      });
+    return res.status(200).json({
+      message: "Saying saved Successfully in Who-Said",
+      saying: newWhoSaid,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error", error });

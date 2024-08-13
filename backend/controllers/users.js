@@ -3,8 +3,6 @@ const jwt = require("jsonwebtoken");
 const cloudinary = require("cloudinary").v2;
 
 module.exports.signUp = async (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
   let { name, email, password, contact, username } = req.body;
   const profilePic = req.file ? req.file.path : null;
 
@@ -137,7 +135,7 @@ module.exports.updateDetails = async (req, res) => {
       .populate("requestsSent")
       .populate("requestsRecieved");
 
-    const newToken = jwt.sign({ user: updatedUser }, 'secretkey', {
+    const newToken = jwt.sign({ user: updatedUser }, "secretkey", {
       algorithm: "HS256",
     });
 
@@ -210,7 +208,6 @@ module.exports.fetchFriendRequests = async (req, res) => {
 
 module.exports.acceptFriendRequest = async (req, res) => {
   try {
-    console.log(req.body);
     const { toId, fromId } = req.body;
     const user1 = await User.findOne({ _id: toId })
       .populate("requestsRecieved")
