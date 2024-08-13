@@ -28,7 +28,6 @@ export default function NewPost({ postCreated }) {
 
       if (response.status === 401) {
         alert("You must be Logged in!");
-
         navigate("/");
       }
 
@@ -61,24 +60,35 @@ export default function NewPost({ postCreated }) {
   }
 
   return (
-    <div>
-      <div className="mt-52 mx-72">
-        <label
-          for="exampleFormControlTextarea1"
-          className="form-label text-emerald-900"
-        >
+    <div className="min-h-screen flex items-center justify-center bg-emerald-50 my-32">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full transform transition-all hover:scale-105 duration-300 ease-in-out">
+        <h2 className="text-2xl font-bold mb-6 text-emerald-900 animate-pulse">
           Cook Something Great...
-        </label>
+        </h2>
         <textarea
-          className="form-control mb-3"
+          className="form-control mb-4 p-4 rounded-lg border border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           id="exampleFormControlTextarea1"
           rows="10"
           value={postText}
           onChange={handlePostTextChange}
           placeholder="What's on your mind?"
         ></textarea>
-        <input type="file" onChange={(e) => setPostPic(e.target.files[0])} />
-        <button className="btn btn-success float-right" onClick={createPost}>
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          Got some Picture to attach with post?
+          <input
+            id="file-upload"
+            type="file"
+            className="hidden"
+            onChange={(e) => setPostPic(e.target.files[0])}
+          />
+        </label>
+        <button
+          className="btn btn-success mt-6 float-right transition-transform transform hover:scale-110 duration-300 ease-in-out"
+          onClick={createPost}
+        >
           Create Post
         </button>
       </div>
