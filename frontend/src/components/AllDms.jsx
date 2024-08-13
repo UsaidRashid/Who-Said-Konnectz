@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import ChatBox from "./Chatbox";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function AllDms() {
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState();
+  const [hoveredCard, setHoveredCard] = useState(null);
   const [token, setToken] = useState();
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function AllDms() {
   }, []);
 
   return (
-    <div className='my-32 mx-32'>
+    <div className="my-32 mx-32">
       {user ? (
         <ChatBox fromId={token.user._id} toId={user._id} />
       ) : (
@@ -64,7 +66,10 @@ export default function AllDms() {
               <li
                 key={user._id}
                 className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg hover:bg-emerald-50 transition duration-200 cursor-pointer"
+                onMouseEnter={() => setHoveredCard(user._id)}
+                onMouseLeave={() => setHoveredCard(null)}
                 onClick={() => setUser(user)}
+                style={{ position: "relative" }}
               >
                 <div className="d-flex flex-row">
                   <img
@@ -76,6 +81,64 @@ export default function AllDms() {
                   <span className="text-emerald-900 font-semibold mt-1 ms-1">
                     {user.name}
                   </span>
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      backgroundColor:
+                        hoveredCard === user._id
+                          ? "rgba(255, 255, 255, 0.5)"
+                          : "transparent",
+                      backdropFilter:
+                        hoveredCard === user._id ? "blur(10px)" : "none",
+                      zIndex: 10,
+                      transition:
+                        "background-color 0.3s ease, backdrop-filter 0.3s ease",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                        paddingRight: "1rem",
+                        height: "100%",
+                      }}
+                    >
+                      {hoveredCard === user._id && (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            textAlign: "center",
+                          }}
+                        >
+                          <p
+                            style={{
+                              fontSize: "1.25rem",
+                              fontWeight: "bold",
+                              color: "#4a5568",
+                              marginBottom: "0.5rem",
+                            }}
+                          >
+                            Message
+                          </p>
+                          <FaArrowRight
+                            style={{
+                              fontSize: "2rem",
+                              color: "#4a5568",
+                              transition: "transform 0.3s ease",
+                              transform: "translateX(0)",
+                              ":hover": {
+                                transform: "translateX(5px)",
+                              },
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </li>
             ))}
