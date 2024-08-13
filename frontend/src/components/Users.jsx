@@ -27,12 +27,12 @@ export default function Users() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-emerald-200 p-6 mt-32 w-full">
+    <div className='my-32 mx-32'>
       {user ? (
         <UserProfile user={user} />
       ) : (
-        <>
-          <h1 className="text-4xl font-bold text-center text-emerald-800 mb-8">
+        <div className="p-6 bg-emerald-100 min-h-screen">
+          <h1 className="text-4xl font-bold text-center text-emerald-800 mb-8 text-center">
             All Users
           </h1>
           <div className="flex flex-wrap flex-column justify-center gap-6">
@@ -123,7 +123,7 @@ export default function Users() {
               <p className="text-gray-500 text-center">No users found.</p>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

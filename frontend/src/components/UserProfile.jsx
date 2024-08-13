@@ -192,24 +192,18 @@ export default function Profile(props) {
   };
 
   return (
-    <div
-      className="min-h-screen py-6 px-4"
-      style={{ backgroundColor: "white", margin: "-25px" }}
-    >
+    <div className="relative overflow-hidden bg-emerald-100">
       {openDM ? (
         <ChatBox fromId={token.user._id} toId={user._id} />
       ) : (
         <div
-          className="relative overflow-hidden p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out"
-          style={{ backgroundColor: "white" }}
+          className="container m-20 p-6 bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out"
+          style={{ width: "87%" }}
         >
-          <div
-            className="container rounded mb-4"
-            style={{ backgroundColor: "white" }}
-          >
+          <div className="container rounded bg-white mb-4">
             <div className="row">
               <div className="col-md-7 border-right">
-                <div className="d-flex flex-column align-items-center text-center p-5 py-5">
+                <div className="d-flex flex-column align-items-center text-center p-5">
                   <img
                     className="rounded-circle mt-5 transition-transform transform hover:scale-110 duration-300 ease-in-out"
                     width="150px"
