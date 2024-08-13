@@ -6,6 +6,7 @@ import { setPosts } from "../store/Features/postSlice";
 import { toggleLike, toggleLikeComment } from "../store/Features/postSlice";
 import { jwtDecode } from "jwt-decode";
 import "../styles/home.css";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Home() {
   const navigate = useNavigate();
@@ -28,10 +29,9 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3002/posts/fetch-individual",
-          { _id: userId }
-        );
+        const response = await axios.post(api + "posts/fetch-individual", {
+          _id: userId,
+        });
 
         dispatch(
           setPosts(
@@ -89,10 +89,10 @@ export default function Home() {
         return;
       }
       const commentId = comment._id;
-      const response = await axios.post(
-        "http://localhost:3002/comments/toggleLike",
-        { commentId, userId }
-      );
+      const response = await axios.post(api + "comments/toggleLike", {
+        commentId,
+        userId,
+      });
       if (response.status === 401) {
         alert("You must be Logged in!");
         navigate("/login");
@@ -133,10 +133,10 @@ export default function Home() {
       }
       const postId = post._id;
 
-      const response = await axios.put(
-        `http://localhost:3002/posts/toggleLike`,
-        { userId, postId }
-      );
+      const response = await axios.put(api + `posts/toggleLike`, {
+        userId,
+        postId,
+      });
 
       if (response.status === 401) {
         alert("You must be Logged in!");
@@ -174,7 +174,7 @@ export default function Home() {
         return;
       }
       const content = e.target.elements[`commentText-${postId}`].value;
-      const response = await axios.post("http://localhost:3002/comments/new", {
+      const response = await axios.post(api + "comments/new", {
         postId,
         author: userId,
         content,
@@ -206,10 +206,7 @@ export default function Home() {
 
   const handleDeletePost = async (_id) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3002/posts/delete-post",
-        { _id }
-      );
+      const response = await axios.post(api + "posts/delete-post", { _id });
       if (response.status === 200) {
         alert("Post Deleted Successfully!");
         window.location.reload();

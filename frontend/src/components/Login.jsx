@@ -9,7 +9,8 @@ import {
   Col,
   FloatingLabel,
 } from "react-bootstrap";
-import "../styles/login.css"; 
+import "../styles/login.css";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
@@ -22,10 +23,7 @@ export default function SignIn() {
     try {
       const userData = { username, password };
 
-      const response = await axios.post(
-        "http://localhost:3002/login",
-        userData
-      );
+      const response = await axios.post(api + "login", userData);
 
       if (response.status === 200) {
         const token = response.data.token;

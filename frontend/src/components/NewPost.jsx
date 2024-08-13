@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function NewPost({ postCreated }) {
   const navigate = useNavigate();
@@ -16,15 +17,11 @@ export default function NewPost({ postCreated }) {
       formData.append("postPic", postPic);
       formData.append("token", storedToken);
 
-      const response = await axios.post(
-        "http://localhost:3002/posts/new",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(api + "posts/new", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 401) {
         alert("You must be Logged in!");

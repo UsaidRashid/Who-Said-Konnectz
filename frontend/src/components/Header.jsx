@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import "../styles/navbar.css";
 import logo from "../Images/logo.png";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Header() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function Header() {
 
   async function logout() {
     try {
-      const response = await axios.get("http://localhost:3002/logout");
+      const response = await axios.get(api + "logout");
 
       if (response.status === 200) {
         localStorage.removeItem("token");

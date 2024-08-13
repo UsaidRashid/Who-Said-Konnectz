@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./UserProfile";
 import { FaArrowRight } from "react-icons/fa";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -11,7 +12,7 @@ export default function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.post("http://localhost:3002/fetch-users");
+        const response = await axios.post(api + "fetch-users");
         if (response.status === 200) {
           setUsers(response.data.users);
         } else {

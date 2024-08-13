@@ -18,6 +18,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "../styles/navigation.css";
 import ProtectedRoute from "./protectedRoute";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Navigation() {
   const [value, setValue] = React.useState(0);
@@ -31,7 +32,7 @@ export default function Navigation() {
     }
     const fetchToken = async () => {
       try {
-        const response = await axios.post("http://localhost:3002/fetch-token", {
+        const response = await axios.post(api + "fetch-token", {
           _id,
         });
         if (response.status === 200) {
@@ -39,7 +40,7 @@ export default function Navigation() {
           localStorage.setItem("token", response.data.token);
         }
       } catch (error) {
-        console.error("Error in Logging in:", error);
+        console.error("Error in Fetching Token:", error);
         console.log(error.response?.data?.message || "An error occurred");
         if (error.response) {
           alert(

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 const ChatBox = ({ fromId, toId }) => {
   const [message, setMessage] = useState("");
@@ -9,10 +10,10 @@ const ChatBox = ({ fromId, toId }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.post(
-          `http://localhost:3002/messages/fetch-messages`,
-          { fromId, toId }
-        );
+        const response = await axios.post(api + `messages/fetch-messages`, {
+          fromId,
+          toId,
+        });
         if (response.status === 200) {
           setMessages(response.data.messages);
         } else {
@@ -37,7 +38,7 @@ const ChatBox = ({ fromId, toId }) => {
 
     fetchMessages();
 
-    socketRef.current = io("http://localhost:3002");
+    socketRef.current = io(api);
 
     socketRef.current.emit("register_user", fromId);
 

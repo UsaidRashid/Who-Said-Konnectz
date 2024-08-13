@@ -3,6 +3,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import ChatBox from "./Chatbox";
 import { FaArrowRight } from "react-icons/fa";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function AllDms() {
   const [users, setUsers] = useState([]);
@@ -23,10 +24,7 @@ export default function AllDms() {
     }
     const main = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3002/fetch-friends",
-          { _id }
-        );
+        const response = await axios.post(api + "fetch-friends", { _id });
         if (response.status === 200) {
           setUsers(response.data.users);
         } else {

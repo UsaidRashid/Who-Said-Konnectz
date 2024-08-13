@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function WhoSaid() {
   const [saying, setSaying] = useState("");
@@ -7,7 +8,7 @@ export default function WhoSaid() {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3002/who-said/fetch")
+      .post(api + "who-said/fetch")
       .then((response) => {
         setSayings(response.data.sayings);
       })
@@ -19,7 +20,7 @@ export default function WhoSaid() {
   const saveSaying = () => {
     if (saying.trim()) {
       axios
-        .post("http://localhost:3002/who-said/save", { said: saying })
+        .post(api + "who-said/save", { said: saying })
         .then((response) => {
           setSayings((prevSayings) => {
             const updatedSayings = Array.isArray(prevSayings)

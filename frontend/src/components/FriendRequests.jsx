@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import UserProfile from "./UserProfile";
 import { jwtDecode } from "jwt-decode";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function FriendRequests() {
   const [users, setUsers] = useState([]);
@@ -16,10 +17,9 @@ export default function FriendRequests() {
   useEffect(() => {
     const main = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3002/fetch-friend-requests",
-          { _id }
-        );
+        const response = await axios.post(api + "fetch-friend-requests", {
+          _id,
+        });
         if (response.status === 200) {
           setUsers(response.data.requests);
         } else {
@@ -47,10 +47,10 @@ export default function FriendRequests() {
 
   const handleAccept = async (fromId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3002/accept-friend-request",
-        { fromId, toId: _id }
-      );
+      const response = await axios.post(api + "accept-friend-request", {
+        fromId,
+        toId: _id,
+      });
       if (response.status === 200) {
         alert("Friend Request Accepted Successfully");
         localStorage.clear();
@@ -78,10 +78,10 @@ export default function FriendRequests() {
 
   const handleReject = async (fromId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3002/reject-friend-request",
-        { fromId, toId: _id }
-      );
+      const response = await axios.post(api + "reject-friend-request", {
+        fromId,
+        toId: _id,
+      });
       if (response.status === 200) {
         alert("Friend Request Rejected Successfully");
         localStorage.clear();

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "../styles/updateProfile.css";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function ProfileUpdate() {
   const token = localStorage.getItem("token");
@@ -45,15 +46,11 @@ export default function ProfileUpdate() {
       const token = localStorage.getItem("token");
       formData.token = token;
       console.log(formData);
-      const response = await axios.post(
-        "http://localhost:3002/update",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(api + "update", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 200) {
         alert(response.data.message);

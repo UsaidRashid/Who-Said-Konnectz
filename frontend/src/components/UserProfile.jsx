@@ -9,6 +9,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../store/Features/postSlice";
 import { toggleLike, toggleLikeComment } from "../store/Features/postSlice";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Profile(props) {
   const [user, setUser] = useState({ friends: [] });
@@ -66,10 +67,9 @@ export default function Profile(props) {
     const fetchPosts = async () => {
       try {
         console.log(user._id);
-        const response = await axios.post(
-          "http://localhost:3002/posts/fetch-individual",
-          { _id: user._id }
-        );
+        const response = await axios.post(api + "posts/fetch-individual", {
+          _id: user._id,
+        });
 
         dispatch(
           setPosts(
@@ -127,10 +127,10 @@ export default function Profile(props) {
         return;
       }
       const commentId = comment._id;
-      const response = await axios.post(
-        "http://localhost:3002/comments/toggleLike",
-        { commentId, userId }
-      );
+      const response = await axios.post(api + "comments/toggleLike", {
+        commentId,
+        userId,
+      });
       if (response.status === 401) {
         alert("You must be Logged in!");
         navigate("/login");
@@ -171,10 +171,10 @@ export default function Profile(props) {
       }
       const postId = post._id;
 
-      const response = await axios.put(
-        `http://localhost:3002/posts/toggleLike`,
-        { userId, postId }
-      );
+      const response = await axios.put(api + `posts/toggleLike`, {
+        userId,
+        postId,
+      });
 
       if (response.status === 401) {
         alert("You must be Logged in!");
@@ -212,7 +212,7 @@ export default function Profile(props) {
         return;
       }
       const content = e.target.elements[`commentText-${postId}`].value;
-      const response = await axios.post("http://localhost:3002/comments/new", {
+      const response = await axios.post(api + "comments/new", {
         postId,
         author: userId,
         content,
@@ -252,13 +252,10 @@ export default function Profile(props) {
         alert("User not found");
         return;
       }
-      const response = await axios.post(
-        "http://localhost:3002/send-friend-request",
-        {
-          toId: user._id,
-          fromId: token.user._id,
-        }
-      );
+      const response = await axios.post(api + "send-friend-request", {
+        toId: user._id,
+        fromId: token.user._id,
+      });
       if (response.status === 200) {
         alert("Friend Request Sent Successfully");
         setToken(response.data.token);
@@ -286,7 +283,7 @@ export default function Profile(props) {
 
   const removeFriend = async (req, res) => {
     try {
-      const response = await axios.post("http://localhost:3002/remove-friend", {
+      const response = await axios.post(api + "remove-friend", {
         toId: user._id,
         fromId: token.user._id,
       });
@@ -317,13 +314,10 @@ export default function Profile(props) {
 
   const handleAccept = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3002/accept-friend-request",
-        {
-          fromId: user._id,
-          toId: token.user._id,
-        }
-      );
+      const response = await axios.post(api + "accept-friend-request", {
+        fromId: user._id,
+        toId: token.user._id,
+      });
       if (response.status === 200) {
         alert("Friend Request Accepted Successfully");
         localStorage.clear();
@@ -351,13 +345,10 @@ export default function Profile(props) {
 
   const handleReject = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3002/reject-friend-request",
-        {
-          fromId: user._id,
-          toId: token.user._id,
-        }
-      );
+      const response = await axios.post(api + "reject-friend-request", {
+        fromId: user._id,
+        toId: token.user._id,
+      });
       if (response.status === 200) {
         alert("Friend Request Rejected Successfully");
         localStorage.clear();
@@ -385,10 +376,7 @@ export default function Profile(props) {
 
   const handleDeletePost = async (_id) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3002/posts/delete-post",
-        { _id }
-      );
+      const response = await axios.post(api + "posts/delete-post", { _id });
       if (response.status === 200) {
         alert("Post Deleted Successfully!");
         window.location.reload();

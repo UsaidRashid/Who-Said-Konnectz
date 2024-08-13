@@ -10,6 +10,7 @@ import {
   Col,
 } from "react-bootstrap";
 import "../styles/signup.css";
+const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -39,15 +40,11 @@ export default function SignUp() {
     formData.append("profilePic", profilePic);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3002/signup",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(api + "signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 200) {
         alert(response.data.message);
