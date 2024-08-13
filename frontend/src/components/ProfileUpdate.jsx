@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import '../styles/updateProfile.css'
+import "../styles/updateProfile.css";
 
 export default function ProfileUpdate() {
   const token = localStorage.getItem("token");
@@ -85,9 +85,7 @@ export default function ProfileUpdate() {
         </h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
-            <label className="text-dark font-weight-bold fs-5">
-              Name
-            </label>
+            <label className="text-dark font-weight-bold fs-5">Name</label>
             <input
               type="text"
               name="name"
@@ -121,20 +119,21 @@ export default function ProfileUpdate() {
             />
           </div>
           <div className="form-group mb-3">
-            <label className="text-dark font-weight-bold fs-5">
-              Profile Picture
+            <label
+              htmlFor="file-upload"
+              className="cursor-pointer inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              Upload a cheesy Profile Picture!
+              <input
+                id="file-upload"
+                type="file"
+                className="hidden"
+                name = 'profilePic'
+                onChange={handleChange}
+              />
             </label>
-            <input
-              type="file"
-              name="profilePic"
-              className="form-control"
-              onChange={handleChange}
-            />
           </div>
-          <button
-            className="btn btn-primary fs-5"
-            type="submit"
-          >
+          <button className="btn btn-primary fs-5" type="submit">
             <b>Update</b>
           </button>
         </form>

@@ -169,15 +169,19 @@ export default function SignUp() {
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="profilePic">
-                <Form.Label className="text-black w-100 text-start ms-3">
-                  Upload Your Profile Picture
-                </Form.Label>
-                <Form.Control
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="form-control-file"
-                />
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  Upload a cheesy Profile Picture!
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    name="profilePic"
+                    onChange={handleFileChange}
+                  />
+                </label>
               </Form.Group>
             </Col>
           </Row>
