@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import "../styles/updateProfile.css";
+// import "../styles/updateProfile.css";
 const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function ProfileUpdate() {

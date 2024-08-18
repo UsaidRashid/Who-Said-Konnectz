@@ -5,7 +5,7 @@ import axios from "axios";
 import { setPosts } from "../store/Features/postSlice";
 import { toggleLike, toggleLikeComment } from "../store/Features/postSlice";
 import { jwtDecode } from "jwt-decode";
-import "../styles/home.css";
+// import "../styles/home.css";
 const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Home() {

@@ -68,7 +68,7 @@ export default function SignIn() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  className="text-dark"
+                  className="bg-dark text-white"
                 />
               </FloatingLabel>
             </Col>
@@ -82,7 +82,7 @@ export default function SignIn() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="text-dark"
+                  className="bg-dark text-white"
                 />
               </FloatingLabel>
             </Col>
