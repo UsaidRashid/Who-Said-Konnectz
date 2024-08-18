@@ -20,6 +20,7 @@ export default function Profile(props) {
   const [openDM, setOpenDM] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -66,7 +67,7 @@ export default function Profile(props) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log(user._id);
+        setLoading(true);
         const response = await axios.post(api + "posts/fetch-individual", {
           _id: user._id,
         });
@@ -105,6 +106,8 @@ export default function Profile(props) {
         } else {
           alert("Error setting up the request: " + error.message);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -407,18 +410,20 @@ export default function Profile(props) {
 
   return (
     <>
-      <div className="relative overflow-hidden bg-emerald-100">
-        {openDM ? (
-          <ChatBox fromId={token.user._id} toId={user._id} />
-        ) : (
-          <div
-            className="container m-20 p-6 bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out"
-            style={{ width: "87%" }}
-          >
+      {openDM ? (
+        <ChatBox fromId={token.user._id} toId={user._id} />
+      ) : (
+        <div
+          className="relative overflow-hidden bg-emerald-100 mx-auto"
+          style={{
+            width: "700px",
+          }}
+        >
+          <div className="container w-5/6 my-48 p-6 bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 ease-in-out">
             <div className="container rounded bg-white mb-4">
-              <div className="row">
+              <div className="flex flex-col align-items-center">
                 <div className="col-md-7 border-right">
-                  <div className="d-flex flex-column align-items-center text-center p-5">
+                  <div className="d-flex flex-column align-items-center text-center p-5 py-5">
                     <img
                       className="rounded-circle mt-5 transition-transform transform hover:scale-110 duration-300 ease-in-out"
                       width="150px"
@@ -457,128 +462,153 @@ export default function Profile(props) {
                         <p className="fs-5">{user?.contact}</p>
                       </div>
                     </div>
-                    {token && token?.user?._id !== user?._id && (
-                      <div className="d-flex flex-row justify-content-evenly w-75 my-3 pt-3">
-                        {isFriend ? (
-                          <>
-                            <button
-                              className="btn btn-primary transition-opacity duration-300 ease-in-out hover:opacity-100"
-                              style={{ opacity: 0.7 }}
-                              onClick={() => setShowConfirmModal(true)}
-                            >
-                              <FontAwesomeIcon
-                                icon={faCheck}
-                                className="me-2"
-                              />
-                              Friends
-                            </button>
+                  </div>
+                  {token && token?.user?._id !== user?._id && (
+                    <div className="flex flex-col md:flex-row gap-4 mt-4">
+                      {isFriend ? (
+                        <>
+                          <button
+                            className="btn btn-primary transition-opacity duration-300 ease-in-out hover:opacity-100"
+                            style={{ opacity: 0.7 }}
+                            onClick={() => setShowConfirmModal(true)}
+                          >
+                            <FontAwesomeIcon icon={faCheck} className="mr-2" />
+                            Friends
+                          </button>
+                          <button
+                            className="btn btn-success transition-transform duration-300 ease-in-out hover:scale-105"
+                            onClick={() => setOpenDM(true)}
+                          >
+                            Message
+                          </button>
+                        </>
+                      ) : requestSent ? (
+                        <button className="btn btn-primary" disabled>
+                          Request Sent!
+                        </button>
+                      ) : requestRecieved ? (
+                        <div className="mt-3">
+                          <p>{user.name} sent you a friend request!</p>
+                          <div className="flex gap-2 mt-2">
                             <button
                               className="btn btn-success transition-transform duration-300 ease-in-out hover:scale-105"
-                              onClick={() => setOpenDM(true)}
+                              onClick={handleAccept}
                             >
-                              Message
+                              Accept
                             </button>
-                          </>
-                        ) : requestSent ? (
-                          <button className="btn btn-primary" disabled>
-                            Request Sent!
-                          </button>
-                        ) : requestRecieved ? (
-                          <div className="mt-3">
-                            <p>{user.name} sent you a friend request!</p>
-                            <div className="flex space-x-2">
-                              <button
-                                className="btn btn-success transition-transform duration-300 ease-in-out hover:scale-105"
-                                onClick={handleAccept}
-                              >
-                                Accept
-                              </button>
-                              <button
-                                className="btn btn-danger transition-transform duration-300 ease-in-out hover:scale-105"
-                                onClick={handleReject}
-                              >
-                                Reject
-                              </button>
-                            </div>
+                            <button
+                              className="btn btn-danger transition-transform duration-300 ease-in-out hover:scale-105"
+                              onClick={handleReject}
+                            >
+                              Reject
+                            </button>
                           </div>
-                        ) : (
-                          <button
-                            className="btn btn-primary transition-transform duration-300 ease-in-out hover:scale-105"
-                            onClick={addFriend}
-                          >
-                            Add Friend
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                        </div>
+                      ) : (
+                        <button
+                          className="btn btn-primary transition-transform duration-300 ease-in-out hover:scale-105"
+                          onClick={addFriend}
+                        >
+                          Add Friend
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        <Modal
-          show={showConfirmModal}
-          onHide={() => setShowConfirmModal(false)}
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Confirm Unfriend</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              Are you sure you want to remove {user.name} from your friends?
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => setShowConfirmModal(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleConfirmUnfriend}>
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
+      <Modal
+        show={showConfirmModal}
+        onHide={() => setShowConfirmModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Unfriend</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to remove {user.name} from your friends?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleConfirmUnfriend}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <>
+        {loading ? (
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="text-center">
+              <div
+                className="text-2xl font-bold text-emerald-600 mb-16"
+                style={{ animation: "glow 1.5s infinite alternate" }}
+              >
+                Fetching Latest Posts...
+                <p>Hang up tight!</p>
+              </div>
+              <div className="relative flex justify-center items-center">
+                <div
+                  className="absolute w-24 h-24 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"
+                  style={{ animationDuration: "1s" }}
+                ></div>
+              </div>
+            </div>
 
-        <div>
-          <div className="container my-48 w-75">
+            <style>{`
+                @keyframes glow {
+                  from {
+                    text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+                  }
+                  to {
+                    text-shadow: 0 0 20px rgba(76, 175, 80, 1);
+                  }
+                }
+              `}</style>
+          </div>
+        ) : (
+          <div className="container my-12 mx-auto px-4">
             {posts && posts.length > 0 ? (
-              <div className="d-flex flex-column gap-4 mx-60">
+              <div className="flex flex-col gap-4">
                 {posts.map((post) => (
                   <div
                     key={post._id}
-                    className="card border-emerald-600 border-3 mb-4"
+                    className="card rounded-lg overflow-hidden relative mx-auto"
                     style={{
                       border: "1px solid #4CAF50",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      position: "relative",
-                      boxShadow: "0 20px 50px rgba(76, 175, 80, 0.4)",
+                      boxShadow: "0 10px 20px rgba(76, 175, 80, 0.8)",
+                      minWidth: "600px",
+                      maxWidth: "600px",
+                      borderRadius: "0.5rem",
                     }}
                   >
-                    <div className="card-body p-4 w-100">
-                      <div className="d-flex align-items-center mb-3 w-100">
+                    <div className="card-body p-4">
+                      <div className="flex items-center mb-3">
                         <img
                           src={post.profilePic}
                           alt=""
-                          height="50px"
-                          width="50px"
-                          className="rounded-circle border border-emerald-600"
-                          style={{ objectFit: "cover", aspectRatio: "1 / 1" }}
+                          className="h-12 w-12 rounded-full border border-emerald-600"
+                          style={{ objectFit: "cover" }}
                         />
-                        <div className="ms-3">
-                          <h5 className="card-title text-emerald-600 mb-0">
+                        <div className="ml-3">
+                          <h5 className="text-emerald-600 text-lg font-semibold mb-0">
                             {post.author}
                           </h5>
-                          <small className="text-muted">@{post.username}</small>
+                          <small className="text-gray-500">
+                            @{post.username}
+                          </small>
                         </div>
                         {user?._id === token?.user?._id && (
                           <button
-                            className="btn btn-danger rounded-pill ms-auto"
+                            className="btn btn-danger rounded-pill ms-auto mt-3 md:mt-0"
                             onClick={() => handleDeletePost(post._id)}
                           >
                             Delete Post!
@@ -586,7 +616,7 @@ export default function Profile(props) {
                         )}
                       </div>
 
-                      <p className="card-text my-4 font-monospace text-center">
+                      <p className="my-4 font-monospace text-center">
                         {post.content}
                       </p>
 
@@ -594,54 +624,47 @@ export default function Profile(props) {
                         <img
                           src={post.postPic}
                           alt=""
-                          className="img-fluid border border-emerald-600"
+                          className="w-full rounded-lg p-1"
                           style={{
-                            borderRadius: "8px",
-                            padding: "4px",
-                            boxShadow: "0 0 5px #4CAF50",
-                            height: "100%",
-                            width: "100%",
+                            border: "2px solid #4CAF50",
+                            boxShadow: "0 6px 12px rgba(76, 175, 80, 0.6)",
+                            height: "auto",
                           }}
                         />
                       )}
-                      <div className="my-3 text-center">
-                        <span className="badge bg-primary text-dark me-2">
-                          {post.likes.length} Likes
-                        </span>
-                        <span className="badge bg-primary text-dark">
-                          {post.comments.length} Comments
-                        </span>
+                      <div className="mb-5 mt-4 text-center">
+                        <div className="flex justify-center gap-2 mb-2">
+                          <span
+                            className="bg-emerald-600 text-white rounded-full px-3 py-1 text-sm font-semibold"
+                            style={{ display: "inline-block" }}
+                          >
+                            {post.likes.length} Likes
+                          </span>
+                          <span
+                            className="bg-emerald-600 text-white rounded-full px-3 py-1 text-sm font-semibold"
+                            style={{ display: "inline-block" }}
+                          >
+                            {post.comments.length} Comments
+                          </span>
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-between align-items-center position-absolute bottom-0 start-0 w-100 bg-white">
+                      <div className="flex justify-between items-center absolute bottom-0 left-0 w-full bg-white p-2">
                         <button
-                          className={`btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50
-                      // {post.isLiked ? "text-danger" : "text-success"} 
-                    `}
+                          className="btn btn-transparent text-emerald-600 flex items-center justify-center w-1/2 border border-transparent transition-colors duration-300 ease-in-out hover:border-emerald-600"
                           onClick={() => handleLike(post)}
-                          style={{
-                            borderWidth: "1px",
-                            borderStyle: "solid",
-                            transition: "border-color 0.3s ease",
-                          }}
                         >
                           {!post.isLiked ? (
                             <i className="fas fa-thumbs-up me-2"></i>
                           ) : (
-                            <i class="fa-solid fa-thumbs-down"></i>
+                            <i className="fa-solid fa-thumbs-down"></i>
                           )}
-
                           {post.isLiked ? "Unlike" : "Like"}
                         </button>
                         <button
                           type="button"
-                          className="btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50"
+                          className="btn btn-transparent text-emerald-600 flex items-center justify-center w-1/2 border border-transparent transition-colors duration-300 ease-in-out hover:border-emerald-600"
                           data-bs-toggle="modal"
                           data-bs-target={`#commentsModal-${post._id}`}
-                          style={{
-                            borderWidth: "1px",
-                            borderStyle: "solid",
-                            transition: "border-color 0.3s ease",
-                          }}
                         >
                           <i className="fas fa-comment me-2"></i>Comments
                         </button>
@@ -649,17 +672,24 @@ export default function Profile(props) {
                     </div>
 
                     <div
-                      className="modal fade slide-up-modal"
+                      className="modal fade"
                       id={`commentsModal-${post._id}`}
                       tabIndex="-1"
                       aria-labelledby={`commentsModalLabel-${post._id}`}
                       aria-hidden="true"
                     >
-                      <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                          <div className="modal-header">
+                      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div
+                          className="modal-content"
+                          style={{
+                            border: "1px solid #4CAF50",
+                            borderRadius: "0.5rem",
+                            boxShadow: "21px 40px 50px rgba(76, 175, 80, 0.8)",
+                          }}
+                        >
+                          <div className="modal-header border-b border-emerald-600">
                             <h5
-                              className="modal-title"
+                              className="modal-title text-emerald-600"
                               id={`commentsModalLabel-${post._id}`}
                             >
                               Comments
@@ -672,52 +702,41 @@ export default function Profile(props) {
                             ></button>
                           </div>
                           <div className="modal-body">
-                            <div className="d-flex flex-column gap-4">
+                            <div className="flex flex-col gap-4">
                               {post.comments.map((comment) => (
                                 <div
                                   key={comment._id}
-                                  className="card border-emerald-600 shadow-lg mb-4"
+                                  className="card rounded-lg shadow-lg mb-4"
                                   style={{
                                     border: "1px solid #4CAF50",
-                                    borderRadius: "8px",
-                                    overflow: "hidden",
+                                    borderRadius: "0.5rem",
+                                    boxShadow:
+                                      "21px 40px 50px rgba(76, 175, 80, 0.8)",
                                   }}
                                 >
-                                  <div className="card-body">
-                                    <div className="d-flex align-items-center mb-3">
+                                  <div className="card-body p-4">
+                                    <div className="flex items-center mb-3">
                                       <img
                                         src={comment.author.profilePic}
                                         alt=""
-                                        height="50px"
-                                        width="50px"
-                                        className="rounded-circle border border-emerald-600"
-                                        style={{
-                                          objectFit: "cover",
-                                          aspectRatio: "1 / 1",
-                                        }}
+                                        className="h-12 w-12 rounded-full border border-emerald-600"
+                                        style={{ objectFit: "cover" }}
                                       />
-                                      <div className="ms-3">
-                                        <h5 className="card-title text-emerald-600 mb-0">
+                                      <div className="ml-3 text-center">
+                                        <h5 className="text-emerald-600 text-lg font-semibold mb-0">
                                           {comment.author.name}
                                         </h5>
-                                        <small className="text-muted">
+                                        <small className="text-gray-500">
                                           @{comment.author.username}
                                         </small>
                                       </div>
                                     </div>
-                                    <p className="card-text mb-4 font-monospace text-center">
+                                    <p className="mb-4 font-monospace text-center">
                                       {comment.content}
                                     </p>
-                                    <div className="d-flex justify-content-between align-items-center">
+                                    <div className="flex flex-col md:flex-row justify-between items-center">
                                       <button
-                                        className={`btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50
-                                   // comment.isCommentLiked ? "text-danger" : ""
-                                  `}
-                                        style={{
-                                          borderWidth: "1px",
-                                          borderStyle: "solid",
-                                          transition: "border-color 0.3s ease",
-                                        }}
+                                        className="btn btn-transparent text-emerald-600 flex items-center justify-center w-full md:w-1/2 border border-transparent transition-colors duration-300 ease-in-out hover:border-emerald-600 mb-2 md:mb-0"
                                         onClick={() =>
                                           handleCommentLike(comment, post._id)
                                         }
@@ -725,13 +744,13 @@ export default function Profile(props) {
                                         {!comment.isCommentLiked ? (
                                           <i className="fas fa-thumbs-up me-2"></i>
                                         ) : (
-                                          <i class="fa-solid fa-thumbs-down"></i>
+                                          <i className="fa-solid fa-thumbs-down"></i>
                                         )}
                                         {comment.isCommentLiked
                                           ? "Unlike"
                                           : "Like"}
                                       </button>
-                                      <span className="badge bg-primary text-dark me-5">
+                                      <span className="bg-emerald-600 text-white rounded-full px-3 py-1 text-sm font-semibold">
                                         {comment.likes.length} Likes
                                       </span>
                                     </div>
@@ -756,8 +775,11 @@ export default function Profile(props) {
                                   required
                                 ></textarea>
                               </div>
-                              <button type="submit" className="btn btn-primary">
-                                Add Comment!
+                              <button
+                                type="submit"
+                                className="btn btn-emerald-600 text-white"
+                              >
+                                Post Comment
                               </button>
                             </form>
                           </div>
@@ -768,11 +790,13 @@ export default function Profile(props) {
                 ))}
               </div>
             ) : (
-              <p>No posts found.</p>
+              <p className="text-center text-emerald-600 text-lg font-semibold">
+                No posts available.
+              </p>
             )}
           </div>
-        </div>
-      </div>
+        )}
+      </>
     </>
   );
 }

@@ -224,7 +224,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Inline style for animations */}
           <style jsx>{`
             @keyframes glow {
               from {
