@@ -85,7 +85,7 @@ export default function Navigation() {
   };
 
   return (
-    <Container component="main">
+    <Container component="main" className="relative">
       <CssBaseline />
       <Box
         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
@@ -97,20 +97,20 @@ export default function Navigation() {
           onChange={(event, newValue) => {
             setValue(newValue);
           }}
-          className="bottom-nav"
+          className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-tr from-[#1d976c] to-[#93f9b9] shadow-lg rounded-t-lg flex justify-around items-center py-2 px-4"
         >
           <BottomNavigationAction
-            className="text-white"
+            className="text-white transition-transform duration-300 hover:text-[#93f9b9] hover:scale-110"
             label="Home"
             icon={<HomeIcon />}
           />
           <BottomNavigationAction
-            className="text-white"
+            className="text-white transition-transform duration-300 hover:text-[#93f9b9] hover:scale-110"
             label="New Post"
             icon={<AddIcon />}
           />
           <BottomNavigationAction
-            className="text-white"
+            className="text-white transition-transform duration-300 hover:text-[#93f9b9] hover:scale-110"
             label="Who-Said"
             icon={<FormatQuoteIcon />}
           />
