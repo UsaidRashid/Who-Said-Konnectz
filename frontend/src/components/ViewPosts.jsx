@@ -5,12 +5,12 @@ import axios from "axios";
 import { setPosts } from "../store/Features/postSlice";
 import { toggleLike, toggleLikeComment } from "../store/Features/postSlice";
 import { jwtDecode } from "jwt-decode";
-// import "../styles/home.css";
 const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const posts = useSelector((state) => state.post.posts);
   const storedToken = localStorage.getItem("token");
@@ -29,6 +29,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true);
         const response = await axios.post(api + "posts/fetch-individual", {
           _id: userId,
         });
@@ -67,6 +68,8 @@ export default function Home() {
         } else {
           alert("Error setting up the request: " + error.message);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -231,225 +234,282 @@ export default function Home() {
   };
 
   return (
-    <div className="container my-48 w-75">
-      {posts && posts.length > 0 ? (
-        <div className="d-flex flex-column gap-4 mx-60">
-          {posts.map((post) => (
+    <>
+      {loading ? (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
             <div
-              key={post._id}
-              className="card border-emerald-600 border-3 mb-4"
-              style={{
-                border: "1px solid #4CAF50",
-                borderRadius: "8px",
-                overflow: "hidden",
-                position: "relative",
-                boxShadow: "0 20px 50px rgba(76, 175, 80, 0.4)",
-              }}
+              className="text-2xl font-bold text-emerald-600 mb-16"
+              style={{ animation: "glow 1.5s infinite alternate" }}
             >
-              <div className="card-body p-4 w-100">
-                <div className="d-flex align-items-center mb-3 w-100">
-                  <img
-                    src={post.profilePic}
-                    alt=""
-                    height="50px"
-                    width="50px"
-                    className="rounded-circle border border-emerald-600"
-                    style={{ objectFit: "cover", aspectRatio: "1 / 1" }}
-                  />
-                  <div className="ms-3">
-                    <h5 className="card-title text-emerald-600 mb-0">
-                      {post.author}
-                    </h5>
-                    <small className="text-muted">@{post.username}</small>
-                  </div>
-                  <button
-                    className="btn btn-danger rounded-pill ms-auto"
-                    onClick={() => handleDeletePost(post._id)}
-                  >
-                    Delete Post!
-                  </button>
-                </div>
-
-                <p className="card-text my-4 font-monospace text-center">
-                  {post.content}
-                </p>
-
-                {post.postPic && (
-                  <img
-                    src={post.postPic}
-                    alt=""
-                    className="img-fluid border border-emerald-600"
-                    style={{
-                      borderRadius: "8px",
-                      padding: "4px",
-                      boxShadow: "0 0 5px #4CAF50",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  />
-                )}
-                <div className="my-3 text-center">
-                  <span className="badge bg-primary text-dark me-2">
-                    {post.likes.length} Likes
-                  </span>
-                  <span className="badge bg-primary text-dark">
-                    {post.comments.length} Comments
-                  </span>
-                </div>
-                <div className="d-flex justify-content-between align-items-center position-absolute bottom-0 start-0 w-100 bg-white">
-                  <button
-                    className={`btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50
-                      // {post.isLiked ? "text-danger" : "text-success"} 
-                    `}
-                    onClick={() => handleLike(post)}
-                    style={{
-                      borderWidth: "1px",
-                      borderStyle: "solid",
-                      transition: "border-color 0.3s ease",
-                    }}
-                  >
-                    {!post.isLiked ? (
-                      <i className="fas fa-thumbs-up me-2"></i>
-                    ) : (
-                      <i class="fa-solid fa-thumbs-down"></i>
-                    )}
-
-                    {post.isLiked ? "Unlike" : "Like"}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50"
-                    data-bs-toggle="modal"
-                    data-bs-target={`#commentsModal-${post._id}`}
-                    style={{
-                      borderWidth: "1px",
-                      borderStyle: "solid",
-                      transition: "border-color 0.3s ease",
-                    }}
-                  >
-                    <i className="fas fa-comment me-2"></i>Comments
-                  </button>
-                </div>
-              </div>
-
-              <div
-                className="modal fade slide-up-modal"
-                id={`commentsModal-${post._id}`}
-                tabIndex="-1"
-                aria-labelledby={`commentsModalLabel-${post._id}`}
-                aria-hidden="true"
-              >
-                <div className="modal-dialog modal-dialog-centered">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5
-                        className="modal-title"
-                        id={`commentsModalLabel-${post._id}`}
-                      >
-                        Comments
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body">
-                      <div className="d-flex flex-column gap-4">
-                        {post.comments.map((comment) => (
-                          <div
-                            key={comment._id}
-                            className="card border-emerald-600 shadow-lg mb-4"
-                            style={{
-                              border: "1px solid #4CAF50",
-                              borderRadius: "8px",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <div className="card-body">
-                              <div className="d-flex align-items-center mb-3">
-                                <img
-                                  src={comment.author.profilePic}
-                                  alt=""
-                                  height="50px"
-                                  width="50px"
-                                  className="rounded-circle border border-emerald-600"
-                                  style={{
-                                    objectFit: "cover",
-                                    aspectRatio: "1 / 1",
-                                  }}
-                                />
-                                <div className="ms-3">
-                                  <h5 className="card-title text-emerald-600 mb-0">
-                                    {comment.author.name}
-                                  </h5>
-                                  <small className="text-muted">
-                                    @{comment.author.username}
-                                  </small>
-                                </div>
-                              </div>
-                              <p className="card-text mb-4 font-monospace text-center">
-                                {comment.content}
-                              </p>
-                              <div className="d-flex justify-content-between align-items-center">
-                                <button
-                                  className={`btn btn-transparent text-emerald-600 d-flex align-items-center justify-content-center w-50
-                                   // comment.isCommentLiked ? "text-danger" : ""
-                                  `}
-                                  style={{
-                                    borderWidth: "1px",
-                                    borderStyle: "solid",
-                                    transition: "border-color 0.3s ease",
-                                  }}
-                                  onClick={() =>
-                                    handleCommentLike(comment, post._id)
-                                  }
-                                >
-                                  {!comment.isCommentLiked ? (
-                                    <i className="fas fa-thumbs-up me-2"></i>
-                                  ) : (
-                                    <i class="fa-solid fa-thumbs-down"></i>
-                                  )}
-                                  {comment.isCommentLiked ? "Unlike" : "Like"}
-                                </button>
-                                <span className="badge bg-primary text-dark me-5">
-                                  {comment.likes.length} Likes
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <form onSubmit={(e) => handleAddComment(e, post._id)}>
-                        <div className="mb-3">
-                          <label
-                            htmlFor={`commentText-${post._id}`}
-                            className="form-label"
-                          >
-                            Your comment
-                          </label>
-                          <textarea
-                            className="form-control"
-                            id={`commentText-${post._id}`}
-                            rows="3"
-                            required
-                          ></textarea>
-                        </div>
-                        <button type="submit" className="btn btn-primary">
-                          Add Comment!
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              Fetching Latest Posts...
+              <p>Hang up tight!</p>
             </div>
-          ))}
+            <div className="relative flex justify-center items-center">
+              <div
+                className="absolute w-24 h-24 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"
+                style={{ animationDuration: "1s" }}
+              ></div>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes glow {
+              from {
+                text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+              }
+              to {
+                text-shadow: 0 0 20px rgba(76, 175, 80, 1);
+              }
+            }
+          `}</style>
         </div>
       ) : (
-        <p>No posts found.</p>
+        <div className="container my-12 mx-auto px-4">
+          {posts && posts.length > 0 ? (
+            <div className="flex flex-col gap-4 my-32">
+              {posts.map((post) => (
+                <div
+                  key={post._id}
+                  className="card rounded-lg overflow-hidden relative mx-auto"
+                  style={{
+                    border: "1px solid #4CAF50",
+                    boxShadow: "0 10px 20px rgba(76, 175, 80, 0.8)",
+                    minWidth: "600px",
+                    maxWidth: "600px",
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <div className="card-body p-4">
+                    <div className="flex items-center mb-3">
+                      <img
+                        src={post.profilePic}
+                        alt=""
+                        className="h-12 w-12 rounded-full border border-emerald-600"
+                        style={{ objectFit: "cover" }}
+                      />
+                      <div className="ml-3">
+                        <h5 className="text-emerald-600 text-lg font-semibold mb-0">
+                          {post.author}
+                        </h5>
+                        <small className="text-gray-500">
+                          @{post.username}
+                        </small>
+                      </div>
+                      <div className="w-50">
+                        <button
+                          className="btn btn-danger rounded-pill float-right"
+                          onClick={handleDeletePost}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="my-4 font-monospace text-center">
+                      {post.content}
+                    </p>
+
+                    {post.postPic && (
+                      <img
+                        src={post.postPic}
+                        alt=""
+                        className="w-full rounded-lg p-1"
+                        style={{
+                          border: "2px solid #4CAF50",
+                          boxShadow: "0 6px 12px rgba(76, 175, 80, 0.6)",
+                          height: "auto",
+                        }}
+                      />
+                    )}
+
+                    <div className="mb-5 mt-4 text-center">
+                      <div className="flex justify-center gap-2 mb-2">
+                        <span
+                          className="bg-emerald-600 text-white rounded-full px-3 py-1 text-sm font-semibold"
+                          style={{ display: "inline-block" }}
+                        >
+                          {post.likes.length} Likes
+                        </span>
+                        <span
+                          className="bg-emerald-600 text-white rounded-full px-3 py-1 text-sm font-semibold"
+                          style={{ display: "inline-block" }}
+                        >
+                          {post.comments.length} Comments
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center absolute bottom-0 left-0 w-full bg-white p-2">
+                      <button
+                        className="btn btn-transparent text-emerald-600 flex items-center justify-center w-1/2 border border-transparent transition-colors duration-300 ease-in-out hover:border-emerald-600"
+                        onClick={() => handleLike(post)}
+                      >
+                        {!post.isLiked ? (
+                          <i className="fas fa-thumbs-up me-2"></i>
+                        ) : (
+                          <i className="fa-solid fa-thumbs-down"></i>
+                        )}
+                        {post.isLiked ? "Unlike" : "Like"}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-transparent text-emerald-600 flex items-center justify-center w-1/2 border border-transparent transition-colors duration-300 ease-in-out hover:border-emerald-600"
+                        data-bs-toggle="modal"
+                        data-bs-target={`#commentsModal-${post._id}`}
+                      >
+                        <i className="fas fa-comment me-2"></i>Comments
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    className="modal fade"
+                    id={`commentsModal-${post._id}`}
+                    tabIndex="-1"
+                    aria-labelledby={`commentsModalLabel-${post._id}`}
+                    aria-hidden="true"
+                    style={{
+                      animation: "slide-up 0.5s ease-out",
+                    }}
+                  >
+                    <div
+                      className="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                      style={{
+                        margin: "0 auto",
+                      }}
+                    >
+                      <div
+                        className="modal-content"
+                        style={{
+                          border: "1px solid #4CAF50",
+                          borderRadius: "0.5rem",
+                          boxShadow: "21px 40px 50px rgba(76, 175, 80, 0.8)",
+                          transform: "translateY(0)",
+                          transition: "transform 0.3s ease, opacity 0.3s ease",
+                        }}
+                      >
+                        <div className="modal-header border-b border-emerald-600">
+                          <h5
+                            className="modal-title text-emerald-600"
+                            id={`commentsModalLabel-${post._id}`}
+                          >
+                            Comments
+                          </h5>
+                          <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div className="modal-body">
+                          <div className="flex flex-col gap-4">
+                            {post.comments.map((comment) => (
+                              <div
+                                key={comment._id}
+                                className="card rounded-lg shadow-lg mb-4"
+                                style={{
+                                  border: "1px solid #4CAF50",
+                                  minWidth: "300px",
+                                  maxWidth: "600px",
+                                  borderRadius: "0.5rem",
+                                  boxShadow:
+                                    "21px 40px 50px rgba(76, 175, 80, 0.8)",
+                                }}
+                              >
+                                <div className="card-body p-4">
+                                  <div className="flex items-center mb-3">
+                                    <img
+                                      src={comment.author.profilePic}
+                                      alt=""
+                                      className="h-12 w-12 rounded-full border border-emerald-600"
+                                      style={{ objectFit: "cover" }}
+                                    />
+                                    <div className="ml-3">
+                                      <h5 className="text-emerald-600 text-lg font-semibold mb-0">
+                                        {comment.author.name}
+                                      </h5>
+                                      <small className="text-gray-500">
+                                        @{comment.author.username}
+                                      </small>
+                                    </div>
+                                  </div>
+                                  <p className="mb-4 font-monospace text-center">
+                                    {comment.content}
+                                  </p>
+                                  <div className="flex justify-between items-center">
+                                    <button
+                                      className="btn btn-transparent text-emerald-600 flex items-center justify-center w-1/2 border border-transparent transition-colors duration-300 ease-in-out hover:border-emerald-600"
+                                      onClick={() =>
+                                        handleCommentLike(comment, post._id)
+                                      }
+                                    >
+                                      {!comment.isCommentLiked ? (
+                                        <i className="fas fa-thumbs-up me-2"></i>
+                                      ) : (
+                                        <i className="fa-solid fa-thumbs-down"></i>
+                                      )}
+                                      {comment.isCommentLiked
+                                        ? "Unlike"
+                                        : "Like"}
+                                    </button>
+                                    <span
+                                      className="bg-emerald-600 text-white rounded-full px-3 py-1 text-sm font-semibold"
+                                      style={{ display: "inline-block" }}
+                                    >
+                                      {comment.likes.length} Likes
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <form onSubmit={(e) => handleAddComment(e, post._id)}>
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`commentText-${post._id}`}
+                                className="form-label"
+                              >
+                                Your comment
+                              </label>
+                              <textarea
+                                className="form-control"
+                                id={`commentText-${post._id}`}
+                                rows="3"
+                                required
+                              ></textarea>
+                            </div>
+                            <button type="submit" className="btn btn-primary">
+                              Add Comment!
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <style>{`
+                    @keyframes slide-up {
+                      from {
+                        transform: translateY(100%);
+                        opacity: 0;
+                      }
+                      to {
+                        transform: translateY(0);
+                        opacity: 1;
+                      }
+                    }
+                    .modal.fade.show {
+                      animation: slide-up 0.5s ease-out;
+                    }
+                  `}</style>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No posts found.</p>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
