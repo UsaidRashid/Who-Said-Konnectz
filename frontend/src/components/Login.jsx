@@ -9,7 +9,6 @@ import {
   Col,
   FloatingLabel,
 } from "react-bootstrap";
-import "../styles/login.css";
 const api = import.meta.env.VITE_BACKEND_URL;
 
 export default function SignIn() {
@@ -51,58 +50,61 @@ export default function SignIn() {
   };
 
   return (
-    <div className="login-container">
-      <Container className="login-form-container w-50">
-        <h1 className="text-center mb-4 fs-3 bolder">Welcome Back!</h1>
-        <Form onSubmit={handleSubmit} className="mx-5">
+    <div className="d-flex flex-column min-vh-100 bg-gradient-to-r from-emerald-500 to-emerald-700 text-white justify-content-center align-items-center">
+      <Container
+        className="bg-white rounded-3 shadow p-4"
+        style={{ maxWidth: "500px" }}
+      >
+        <h1 className="text-center mb-4 text-emerald-600 font-bold fs-3">
+          Welcome Back!
+        </h1>
+        <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col>
-              <FloatingLabel
-                controlId="username"
-                label="Username"
-                className="text-dark"
-              >
+              <FloatingLabel controlId="username" label="Username">
                 <Form.Control
                   type="text"
                   placeholder="Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
+                  className="text-dark"
                 />
               </FloatingLabel>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col>
-              <FloatingLabel
-                controlId="password"
-                label="Password"
-                className="text-dark"
-              >
+              <FloatingLabel controlId="password" label="Password">
                 <Form.Control
                   type="password"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="text-dark"
                 />
               </FloatingLabel>
             </Col>
           </Row>
-          <Button type="submit" variant="primary" className="w-50 mb-3">
+          <Button type="submit" variant="primary" className="w-100 mb-3">
             Sign In
           </Button>
           <Row className="mb-3">
             <Col>
               <p className="text-center text-black">
-                <Link to="/signup">Don't have an account? Sign Up</Link>
+                <Link to="/signup" className="text-primary">
+                  Don't have an account? Sign Up
+                </Link>
               </p>
             </Col>
           </Row>
         </Form>
       </Container>
-      <footer className="login-footer">
-        <p>Copyright © Who-Said Private Limited {new Date().getFullYear()}</p>
+      <footer className="text-center bg-white py-3 text-dark w-100 mt-3 absolute bottom-0">
+        <p className="mb-0">
+          Copyright © Who-Said Private Limited {new Date().getFullYear()}
+        </p>
       </footer>
     </div>
   );
