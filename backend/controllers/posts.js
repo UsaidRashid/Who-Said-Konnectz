@@ -60,7 +60,14 @@ module.exports.toggleLike = async (req, res) => {
 
 module.exports.fetchPosts = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     const posts = await Post.find({})
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate("author")
       .populate({
         path: "comments",
@@ -68,9 +75,15 @@ module.exports.fetchPosts = async (req, res) => {
           path: "author",
         },
       });
-    return res
-      .status(200)
-      .json({ message: "Posts fetched successfully", posts });
+
+    const totalPosts = await Post.countDocuments({});
+    const hasMore = page * limit < totalPosts;
+
+    return res.status(200).json({
+      message: "Posts fetched successfully",
+      posts,
+      hasMore,
+    });
   } catch (error) {
     console.error("Error fetching posts:", error);
     return res.status(500).json({ message: "Internal Server Error" });
