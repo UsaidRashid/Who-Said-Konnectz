@@ -8,6 +8,7 @@ import {
   FloatingLabel,
   Row,
   Col,
+  Spinner,
 } from "react-bootstrap";
 const api = import.meta.env.VITE_BACKEND_URL;
 
@@ -20,6 +21,7 @@ export default function SignUp() {
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
   const [profilePic, setProfilePic] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -38,6 +40,7 @@ export default function SignUp() {
     formData.append("password", password);
     formData.append("profilePic", profilePic);
 
+    setLoading(true);
     try {
       const response = await axios.post(api + "signup", formData, {
         headers: {
@@ -67,12 +70,30 @@ export default function SignUp() {
       } else {
         alert("Error setting up the request: " + error.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       <div className="d-flex flex-column min-vh-100 bg-gradient-to-r from-emerald-500 to-emerald-700 text-white justify-content-center align-items-center">
+        {loading && (
+          <div
+            className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              zIndex: 1000,
+            }}
+          >
+            <div className="text-center">
+              <Spinner animation="border" variant="success" />
+              <h2 className="text-emerald-600 mt-3">
+                Signing you up... Please wait
+              </h2>
+            </div>
+          </div>
+        )}
         <Container
           className="bg-white rounded-3 shadow p-4"
           style={{ maxWidth: "500px" }}
@@ -170,8 +191,13 @@ export default function SignUp() {
                 </Form.Group>
               </Col>
             </Row>
-            <Button type="submit" variant="primary" className="w-100 mb-3">
-              Sign Up
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-100 mb-3"
+              disabled={loading}
+            >
+              {loading ? "Signing Up..." : "Sign Up"}
             </Button>
             <p className="text-center text-black">
               Already have an account?{" "}
