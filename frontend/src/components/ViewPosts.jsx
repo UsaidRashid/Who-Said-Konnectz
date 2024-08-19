@@ -35,8 +35,8 @@ export default function Home() {
         });
 
         dispatch(
-          setPosts(
-            response.data.posts.map((post) => ({
+          setPosts({
+            posts: response.data.posts.map((post) => ({
               ...post,
               isLiked: post.likes.includes(userId),
               _id: post._id,
@@ -50,8 +50,8 @@ export default function Home() {
                 ...comment,
                 isCommentLiked: comment.likes.includes(userId),
               })),
-            }))
-          )
+            })),
+          })
         );
       } catch (error) {
         console.error("Error in fetching individual posts:", error);

@@ -9,7 +9,11 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     setPosts(state, action) {
-      state.posts = [...state.posts, ...action.payload];
+      if (action.payload.home) {
+        state.posts = [...state.posts, ...action.payload.posts];
+      } else {
+        state.posts = action.payload.posts;
+      }
     },
     toggleLike(state, action) {
       const { postId, userId } = action.payload;

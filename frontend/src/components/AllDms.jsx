@@ -68,11 +68,11 @@ export default function AllDms() {
                   style={{ animation: "glow 1.5s infinite alternate" }}
                 >
                   Fetching Your Chats...
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl mt-2">
                     Lol Do Anyone talk with you?
                   </p>
                 </div>
-                <div className="relative flex justify-center items-center">
+                <div className="relative flex justify-center items-center mt-5">
                   <div
                     className="absolute w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"
                     style={{ animationDuration: "1s" }}

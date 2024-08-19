@@ -52,12 +52,12 @@ export default function Users() {
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-emerald-600 mb-6"
               style={{ animation: "glow 1.5s infinite alternate" }}
             >
-              Fetching Your Friend Requests...
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl">
-                Lol Do You Really Think?
+              Fetching Users...
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl my-2">
+                They are infinite!
               </p>
             </div>
-            <div className="relative flex justify-center items-center">
+            <div className="relative flex justify-center items-center mt-5">
               <div
                 className="absolute w-16 h-16 sm:w-24 sm:h-24 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"
                 style={{ animationDuration: "1s" }}
@@ -65,7 +65,6 @@ export default function Users() {
             </div>
           </div>
 
-          {/* Inline style for animations */}
           <style>{`
             @keyframes glow {
               from {

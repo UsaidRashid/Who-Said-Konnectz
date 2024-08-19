@@ -121,11 +121,11 @@ export default function FriendRequests() {
               style={{ animation: "glow 1.5s infinite alternate" }}
             >
               Fetching Your Friend Requests...
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl my-2">
                 Lol Do You Really Think?
               </p>
             </div>
-            <div className="relative flex justify-center items-center">
+            <div className="relative flex justify-center items-center mt-5">
               <div
                 className="absolute w-16 h-16 sm:w-24 sm:h-24 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"
                 style={{ animationDuration: "1s" }}

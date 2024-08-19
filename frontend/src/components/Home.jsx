@@ -36,8 +36,8 @@ export default function Home() {
           `${api}posts/fetch?page=${page}&limit=10`
         );
         dispatch(
-          setPosts(
-            response.data.posts.map((post) => ({
+          setPosts({
+            posts: response.data.posts.map((post) => ({
               ...post,
               isLiked: post.likes.includes(userId),
               _id: post._id,
@@ -47,12 +47,14 @@ export default function Home() {
               postPic: post.postPic,
               profilePic: post.author.profilePic,
               likes: post.likes,
+              createdAt: post.createdAt,
               comments: post.comments.map((comment) => ({
                 ...comment,
                 isCommentLiked: comment.likes.includes(userId),
               })),
-            }))
-          )
+            })),
+            home: true,
+          })
         );
 
         setHasMore(response.data.hasMore);
@@ -228,6 +230,16 @@ export default function Home() {
       }
     }
   };
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
   return (
     <>
       <div className="container my-12 mx-auto px-4">
@@ -257,7 +269,11 @@ export default function Home() {
                       <h5 className="text-emerald-600 text-lg font-semibold mb-0">
                         {post.author}
                       </h5>
-                      <small className="text-gray-500">@{post.username}</small>
+                      <small className="text-gray-500">@{post.username}</small>{" "}
+                      <br />
+                      <small className="text-gray-500">
+                        Posted At : {formatDate(post.createdAt)}
+                      </small>
                     </div>
                   </div>
 
