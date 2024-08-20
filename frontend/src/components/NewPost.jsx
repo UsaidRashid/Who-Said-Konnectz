@@ -7,9 +7,11 @@ export default function NewPost({ postCreated }) {
   const navigate = useNavigate();
   const [postText, setPostText] = useState("");
   const [postPic, setPostPic] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   async function createPost() {
     try {
+      setLoading(true);
       const content = postText;
       const storedToken = localStorage.getItem("token");
       const formData = new FormData();
@@ -49,6 +51,8 @@ export default function NewPost({ postCreated }) {
       } else {
         alert("Error setting up the request: " + error.message);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -85,8 +89,9 @@ export default function NewPost({ postCreated }) {
         <button
           className="btn btn-success mt-6 float-right transition-transform transform hover:scale-110 duration-300 ease-in-out"
           onClick={createPost}
+          disabled={loading}
         >
-          Create Post
+          {loading ? "Posting..." : "Create Post"}
         </button>
       </div>
     </div>

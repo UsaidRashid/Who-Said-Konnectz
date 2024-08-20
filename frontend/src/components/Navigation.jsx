@@ -16,7 +16,6 @@ import WhoSaid from "./WhoSaid";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-// import "../styles/navigation.css";
 import ProtectedRoute from "./protectedRoute";
 const api = import.meta.env.VITE_BACKEND_URL;
 

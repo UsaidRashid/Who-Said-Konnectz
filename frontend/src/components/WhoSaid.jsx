@@ -6,10 +6,10 @@ export default function WhoSaid() {
   const [saying, setSaying] = useState("");
   const [sayings, setSayings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(2000);
     axios
       .post(api + "who-said/fetch")
       .then((response) => {
@@ -25,6 +25,7 @@ export default function WhoSaid() {
 
   const saveSaying = () => {
     if (saying.trim()) {
+      setLoadingPost(true);
       axios
         .post(api + "who-said/save", { said: saying })
         .then((response) => {
@@ -38,6 +39,9 @@ export default function WhoSaid() {
         })
         .catch((error) => {
           console.error("There was an error saving the saying!", error);
+        })
+        .finally(() => {
+          setLoadingPost(false);
         });
     }
   };
@@ -62,7 +66,7 @@ export default function WhoSaid() {
             </div>
           </div>
 
-          <style jsx>{`
+          <style>{`
             @keyframes glow {
               from {
                 text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
@@ -110,8 +114,9 @@ export default function WhoSaid() {
               <button
                 onClick={saveSaying}
                 className="bg-white text-emerald-600 font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-emerald-100 transition duration-200"
+                disabled={loadingPost}
               >
-                Post
+                {loadingPost ? "Posting..." : "Post"}
               </button>
             </div>
           </div>
